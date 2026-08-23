@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>iPhone Screen Magic</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: env(safe-area-inset-top, 50px) 20px calc(env(safe-area-inset-bottom, 20px) + 10px) 20px;
+            position: relative;
+        }
+
+        /* GRID DE APPS (4 Columnas) */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px 18px;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .app-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.4s ease, transform 0.3s ease;
+        }
+
+        .app-name {
+            color: #ffffff;
+            font-size: 11px;
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+        }
+
+        /* DOCK INFERIOR */
+        .dock-container {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+
+        /* BARRA HOME */
+        .home-indicator {
+            width: 135px;
+            height: 5px;
+            background-color: #ffffff;
+            border-radius: 3px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        /* ANIMACIÓN DE CAMBIO */
+        .app-icon.flip {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        /* BOTÓN INVISIBLE EN LA ESQUINA INFERIOR DERECHA PARA LA OLA MÁGICA */
+        #secret-trigger {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            z-index: 999;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOTÓN INVISIBLE PARA ACTIVAR LA OLA -->
+    <div id="secret-trigger"></div>
+
+    <!-- GRID PRINCIPAL DE APPS -->
+    <div class="apps-grid" id="appsGrid"></div>
+
+    <!-- DOCK DE ABAJO -->
+    <div class="dock-container" id="dockGrid"></div>
+
+    <div class="home-indicator"></div>
+
+    <script>
+        // Aplicaciones principales de la pantalla
+        const initialApps = [
+            { id: 'instagram', name: 'Instagram', bg: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', icon: '📸' },
+            { id: 'tiktok', name: 'TikTok', bg: '#000000', icon: '🎵' },
+            { id: 'whatsapp', name: 'WhatsApp', bg: '#25D366', icon: '💬' },
+            { id: 'spotify', name: 'Spotify', bg: '#1DB954', icon: '🎧' },
+            { id: 'youtube', name: 'YouTube', bg: '#FF0000', icon: '▶️' },
+            { id: 'netflix', name: 'Netflix', bg: '#E50914', icon: '🎬' },
+            { id: 'twitter', name: 'X / Twitter', bg: '#1DA1F2', icon: '🐦' },
+            { id: 'maps', name: 'Mapas', bg: '#34A853', icon: '🗺️' },
+            { id: 'photos', name: 'Fotos', bg: 'linear-gradient(135deg, #ff7e5f, #feb47b)', icon: '🖼️' },
+            { id: 'notes', name: 'Notas', bg: '#F4C430', icon: '📝' },
+            { id: 'weather', name: 'Tiempo', bg: '#29B6F6', icon: '☀️' },
+            { id: 'settings', name: 'Ajustes', bg: '#8E8E93', icon: '⚙️' }
+        ];
+
+        // La app sorpresa que "no estaba" y que aparece al pulsar
+        const intruderApp = { id: 'calculator', name: 'Calculadora', bg: '#FF9500', icon: '🧮' };
+
+        const dockApps = [
+            { id: 'phone', name: 'Teléfono', bg: '#34C759', icon: '📞' },
+            { id: 'safari', name: 'Safari', bg: '#007AFF', icon: '🧭' },
+            { id: 'messages', name: 'Mensajes', bg: '#34C759', icon: '💬' },
+            { id: 'music', name: 'Música', bg: '#FA2D48', icon: '🎵' }
+        ];
+
+        let thoughtApp = null; // Guardará la app que el espectador pensó
+        let isTransformed = false;
+
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = '';
+            
+            initialApps.forEach((app, index) => {
+                const el = document.createElement('div');
+                el.className = 'app-item';
+                el.onclick = () => onAppTapped(app, el);
+
+                el.innerHTML = `
+                    <div class="app-icon" style="background: ${app.bg}">${app.icon}</div>
+                    <div class="app-name">${app.name}</div>
+                `;
+                grid.appendChild(el);
+            });
+
+            const dock = document.getElementById('dockGrid');
+            dock.innerHTML = '';
+            dockApps.forEach((app) => {
+                const el = document.createElement('div');
+                el.className = 'app-item';
+                el.innerHTML = `<div class="app-icon" style="background: ${app.bg}">${app.icon}</div>`;
+                dock.appendChild(el);
+            });
+        }
+
+        // PASO 2 y 3: Tú tocas la app que te han dicho. Se transforma en la app intrusa.
+        function onAppTapped(app, element) {
+            if (thoughtApp) return; // Solo se puede tocar una vez
+
+            thoughtApp = app; // Nos guardamos en secreto la app que eligió
+
+            const iconDiv = element.querySelector('.app-icon');
+            const nameDiv = element.querySelector('.app-name');
+
+            iconDiv.classList.add('flip');
+
+            setTimeout(() => {
+                // Reemplazamos la app tocada por la Calculadora (o app intrusa)
+                iconDiv.style.background = intruderApp.bg;
+                iconDiv.innerHTML = intruderApp.icon;
+                if (nameDiv) nameDiv.textContent = intruderApp.name;
+                iconDiv.classList.remove('flip');
+            }, 150);
+
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        // PASO 4: La ola mágica transforma TODAS las apps en la app pensada
+        function triggerWaveTransformation() {
+            if (!thoughtApp || isTransformed) return;
+            isTransformed = true;
+
+            const allAppElements = document.querySelectorAll('.apps-grid .app-item, .dock-container .app-item');
+            
+            allAppElements.forEach((el, index) => {
+                setTimeout(() => {
+                    const iconDiv = el.querySelector('.app-icon');
+                    const nameDiv = el.querySelector('.app-name');
+
+                    iconDiv.style.background = thoughtApp.bg;
+                    iconDiv.innerHTML = thoughtApp.icon;
+                    iconDiv.classList.add('flip');
+
+                    if (nameDiv) {
+                        nameDiv.textContent = thoughtApp.name;
+                    }
+
+                    setTimeout(() => iconDiv.classList.remove('flip'), 200);
+
+                    if (navigator.vibrate) navigator.vibrate(20);
+                }, index * 70); // Retraso de 70ms por app para crear el efecto de ola de arriba a abajo
+            });
+        }
+
+        // Activadores para la ola:
+        // 1. Tocar el botón invisible de la esquina inferior derecha
+        document.getElementById('secret-trigger').addEventListener('click', triggerWaveTransformation);
+
+        // 2. O hacer el gesto de deslizar hacia abajo en la pantalla
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchend', (e) => {
+            let touchEndY = e.changedTouches[0].clientY;
+            if (touchEndY - touchStartY > 50) {
+                triggerWaveTransformation();
+            }
+        });
+
+        renderApps();
+    </script>
+</body>
+</html>
