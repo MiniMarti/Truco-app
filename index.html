@@ -199,7 +199,6 @@
 
             twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></g></svg>`,
 
-            // Icono de Teléfono idéntico al del dock de la izquierda
             phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(13, 13) scale(1.25)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158"/></g></svg>`,
 
             settings: `<svg viewBox="0 0 60 60"><defs><linearGradient id="settBg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3A3A3C"/><stop offset="100%" stop-color="#1C1C1E"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#settBg)"/><g transform="translate(30, 30)"><circle cx="0" cy="0" r="18" fill="none" stroke="#d1d1d6" stroke-width="3" stroke-dasharray="2.5, 2.2"/><circle cx="0" cy="0" r="13" fill="#3A3A3C"/><circle cx="0" cy="0" r="13" fill="none" stroke="#d1d1d6" stroke-width="1.2"/><g stroke="#d1d1d6" stroke-width="2.8" stroke-linecap="round"><line x1="0" y1="0" x2="0" y2="-12"/><line x1="0" y1="0" x2="10.4" y2="6"/><line x1="0" y1="0" x2="-10.4" y2="6"/></g><circle cx="0" cy="0" r="3" fill="#1C1C1E" stroke="#d1d1d6" stroke-width="1.5"/></g></svg>`,
@@ -225,32 +224,33 @@
             safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="none" stroke="#0a84ff" stroke-width="3"/><polygon points="30,9 37,28 30,30" fill="#ff453a"/><polygon points="30,51 23,32 30,30" fill="#fff"/></svg>`
         };
 
-        const apps = [
+        const originalAppsData = [
             { id: 'instagram', name: 'Instagram', svg: SVGS.instagram, badge: '1' },
             { id: 'telegram', name: 'Telegram', svg: SVGS.telegram, badge: null },
             { id: 'tiktok', name: 'TikTok', svg: SVGS.tiktok, badge: null },
             { id: 'spotify', name: 'Spotify', svg: SVGS.spotify, badge: null },
-            
             { id: 'youtube', name: 'YouTube', svg: SVGS.youtube, badge: null },
             { id: 'camera', name: 'Cámara', svg: SVGS.camera, badge: null },
             { id: 'weather', name: 'Tiempo', svg: SVGS.weather, badge: null },
             { id: 'messages', name: 'Mensajes', svg: SVGS.messages, badge: null },
-            
             { id: 'twitch', name: 'Twitch', svg: SVGS.twitch, badge: null },
             { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
             { id: 'settings', name: 'Ajustes', svg: SVGS.settings, badge: '4' },
             { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp, badge: '2' },
-            
             { id: 'appstore', name: 'App Store', svg: SVGS.appstore, badge: null },
             { id: 'photos', name: 'Fotos', svg: SVGS.photos, badge: null },
             { id: 'google', name: 'Google', svg: SVGS.google, badge: '7' },
             { id: 'gmail', name: 'Gmail', svg: SVGS.gmail, badge: null },
-            
             { id: 'archivos', name: 'Archivos', svg: SVGS.archivos, badge: null },
             { id: 'contactos', name: 'Contactos', svg: SVGS.contactos, badge: null },
             { id: 'cartera', name: 'Cartera', svg: SVGS.cartera, badge: null },
             { id: 'notas', name: 'Notas', svg: SVGS.notas, badge: null }
         ];
+
+        let apps = JSON.parse(JSON.stringify(originalAppsData));
+        const intruderApp = { id: 'safari', name: 'Safari', svg: SVGS.safari, badge: null };
+        let targetApp = null;
+        let isTransformed = false;
 
         const dockApps = [
             { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
@@ -259,16 +259,12 @@
             { id: 'camera', name: 'Cámara', svg: SVGS.camera, badge: null }
         ];
 
-        const intruderApp = { id: 'safari', name: 'Safari', svg: SVGS.safari, badge: null };
-        let targetApp = null;
-        let isTransformed = false;
-
         function render() {
             const grid = document.getElementById('appsGrid');
             grid.innerHTML = '';
-            apps.forEach(app => {
+            apps.forEach((app, index) => {
                 grid.innerHTML += `
-                    <div class="app-item" onclick="handleTap('${app.id}', this)">
+                    <div class="app-item" onclick="handleTap('${app.id}', this, ${index})">
                         <div class="app-icon-wrapper">
                             <div class="app-icon">${app.svg}</div>
                             ${app.badge ? `<div class="badge">${app.badge}</div>` : ''}
@@ -292,9 +288,11 @@
             });
         }
 
-        function handleTap(id, element) {
-            const clickedApp = apps.find(a => a.id === id);
+        function handleTap(id, element, index) {
+            const clickedApp = originalAppsData[index];
             if (!targetApp) targetApp = clickedApp;
+
+            apps[index] = { ...intruderApp };
 
             const iconDiv = element.querySelector('.app-icon');
             const nameDiv = element.querySelector('.app-name');
@@ -318,6 +316,7 @@
             const allItems = document.querySelectorAll('.apps-grid .app-item');
             allItems.forEach((el, index) => {
                 setTimeout(() => {
+                    apps[index] = { ...targetApp };
                     const iconDiv = el.querySelector('.app-icon');
                     const nameDiv = el.querySelector('.app-name');
                     const badgeDiv = el.querySelector('.badge');
@@ -325,7 +324,16 @@
                     iconDiv.innerHTML = targetApp.svg;
                     iconDiv.classList.add('flip');
                     if (nameDiv) nameDiv.textContent = targetApp.name;
-                    if (badgeDiv) badgeDiv.remove();
+                    if (badgeDiv) {
+                        badgeDiv.textContent = targetApp.badge;
+                    } else if (targetApp.badge) {
+                        // Si antes no tenía badge pero el objetivo sí, lo recreamos
+                        const wrapper = el.querySelector('.app-icon-wrapper');
+                        const newBadge = document.createElement('div');
+                        newBadge.className = 'badge';
+                        newBadge.textContent = targetApp.badge;
+                        wrapper.appendChild(newBadge);
+                    }
 
                     setTimeout(() => iconDiv.classList.remove('flip'), 200);
                     if (navigator.vibrate) navigator.vibrate(15);
@@ -333,13 +341,57 @@
             });
         }
 
+        function revertWave() {
+            if (!isTransformed) return;
+            
+            const allItems = document.querySelectorAll('.apps-grid .app-item');
+            allItems.forEach((el, index) => {
+                setTimeout(() => {
+                    apps[index] = JSON.parse(JSON.stringify(originalAppsData[index]));
+                    const iconDiv = el.querySelector('.app-icon');
+                    const nameDiv = el.querySelector('.app-name');
+                    const wrapper = el.querySelector('.app-icon-wrapper');
+                    const existingBadge = wrapper.querySelector('.badge');
+                    if (existingBadge) existingBadge.remove();
+
+                    iconDiv.innerHTML = originalAppsData[index].svg;
+                    iconDiv.classList.add('flip');
+                    if (nameDiv) nameDiv.textContent = originalAppsData[index].name;
+                    
+                    if (originalAppsData[index].badge) {
+                        const newBadge = document.createElement('div');
+                        newBadge.className = 'badge';
+                        newBadge.textContent = originalAppsData[index].badge;
+                        wrapper.appendChild(newBadge);
+                    }
+
+                    setTimeout(() => iconDiv.classList.remove('flip'), 200);
+                    if (navigator.vibrate) navigator.vibrate(15);
+                }, index * 60);
+            });
+
+            setTimeout(() => {
+                isTransformed = false;
+            }, allItems.length * 60 + 200);
+        }
+
+        // Clic en la esquina inferior derecha para ola
         document.getElementById('secret-trigger').addEventListener('click', runWave);
 
+        // Control gestual de deslizamiento (Swipe Up / Swipe Down)
         let startY = 0;
-        window.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+        window.addEventListener('touchstart', e => { 
+            startY = e.touches[0].clientY; 
+        });
+        
         window.addEventListener('touchend', e => {
-            if (e.changedTouches[0].clientY - startY > 50) {
+            let diffY = e.changedTouches[0].clientY - startY;
+            if (diffY > 50) {
+                // Deslizar hacia abajo -> Ola de transformación
                 runWave();
+            } else if (diffY < -50) {
+                // Deslizar hacia arriba -> Revertir apps al sitio
+                revertWave();
             }
         });
 
