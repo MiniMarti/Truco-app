@@ -250,7 +250,7 @@
         let apps = JSON.parse(JSON.stringify(originalAppsData));
         const intruderApp = { id: 'safari', name: 'Safari', svg: SVGS.safari, badge: null };
         let targetApp = null;
-        let canTapApp = true; // Control de bloqueo: solo permite una vez hasta reiniciar
+        let canTapApp = true;
 
         const dockApps = [
             { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
@@ -289,11 +289,11 @@
         }
 
         function handleTap(id, element, index) {
-            if (!canTapApp) return; // Si ya se usó, se bloquea y no hace nada al pulsar otra app
-            canTapApp = false; // Bloquea futuros toques individuales hasta reiniciar
+            if (!canTapApp) return; 
+            canTapApp = false; 
 
-            const clickedApp = originalAppsData[index];
-            if (!targetApp) targetApp = clickedApp;
+            // Guardamos exactamente la app real que el usuario ha pulsado para que sea el target de la ola
+            targetApp = originalAppsData[index];
 
             apps[index] = { ...intruderApp };
 
@@ -316,7 +316,7 @@
             if (!targetApp) {
                 targetApp = originalAppsData[0];
             }
-            canTapApp = false; // Bloquea toques individuales también al activar la ola
+            canTapApp = false; 
 
             const allItems = document.querySelectorAll('.apps-grid .app-item');
             allItems.forEach((el, index) => {
@@ -351,7 +351,8 @@
         }
 
         function revertWave() {
-            canTapApp = true; // Restaura la posibilidad de pulsar una app al limpiar / reiniciar
+            canTapApp = true; 
+            targetApp = null; // Limpiamos el target guardado al reiniciar
             
             const allItems = document.querySelectorAll('.apps-grid .app-item');
             allItems.forEach((el, index) => {
@@ -380,10 +381,8 @@
             });
         }
 
-        // Clic en la esquina inferior derecha para ola
         document.getElementById('secret-trigger').addEventListener('click', runWave);
 
-        // Control gestual de deslizamiento (Swipe Up / Swipe Down)
         let startY = 0;
         window.addEventListener('touchstart', e => { 
             startY = e.touches[0].clientY; 
@@ -392,10 +391,8 @@
         window.addEventListener('touchend', e => {
             let diffY = e.changedTouches[0].clientY - startY;
             if (diffY > 50) {
-                // Deslizar hacia abajo -> Ola de transformación
                 runWave();
             } else if (diffY < -50) {
-                // Deslizar hacia arriba -> Revertir apps al sitio (y desbloquear)
                 revertWave();
             }
         });
