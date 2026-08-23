@@ -28,7 +28,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: env(safe-area-inset-top, 50px) 20px env(safe-area-inset-bottom, 8px) 20px;
+            padding: env(safe-area-inset-top, 50px) 20px calc(env(safe-area-inset-bottom, 10px) + 5px) 20px;
             position: relative;
         }
 
@@ -78,7 +78,6 @@
 
         .dock-wrapper {
             width: 100%;
-            margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 2px);
             z-index: 1;
         }
 
@@ -92,15 +91,6 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 14px;
             border: 0.5px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .home-indicator {
-            width: 138px;
-            height: 5px;
-            background-color: #ffffff;
-            border-radius: 3px;
-            margin: 8px auto 2px auto;
-            opacity: 0.9;
         }
 
         .app-icon.flip {
@@ -126,7 +116,6 @@
 
     <div class="dock-wrapper">
         <div class="dock-container" id="dockGrid"></div>
-        <div class="home-indicator"></div>
     </div>
 
     <script>
