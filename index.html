@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>iOS 18 Dark Icons Fixed</title>
+    <title>iOS Magic Switch</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -13,8 +13,6 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
-            -webkit-font-smoothing: antialiased;
         }
 
         html, body {
@@ -24,268 +22,134 @@
             background-color: #000;
         }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: env(safe-area-inset-top, 50px) 20px env(safe-area-inset-bottom, 8px) 20px;
-            position: relative;
-        }
-
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px 14px;
-            margin-top: 15px;
+        .bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center top;
             z-index: 1;
         }
 
-        .app-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 15px 12px;
+            padding-top: calc(env(safe-area-inset-top, 40px) + 25px);
+            padding-left: 22px;
+            padding-right: 22px;
+            padding-bottom: 25%;
+            z-index: 2;
         }
 
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 14px;
+        .app-touch-zone {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .app-icon svg {
+        .calc-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 15px;
+            background-color: #1c1c1e;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .calc-icon svg {
             width: 100%;
             height: 100%;
-            display: block;
         }
 
-        .app-name {
-            color: #FFFFFF;
-            font-size: 11px;
-            margin-top: 5px;
-            text-align: center;
-            font-weight: 500;
-            letter-spacing: -0.2px;
-            white-space: nowrap;
+        .show-calc .calc-icon {
+            display: flex;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .dock-wrapper {
-            width: 100%;
-            margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 2px);
-            z-index: 1;
-        }
-
-        .dock-container {
-            background: rgba(30, 30, 32, 0.75);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 35px;
-            padding: 12px 14px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            border: 0.5px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .home-indicator {
-            width: 138px;
-            height: 5px;
-            background-color: #ffffff;
-            border-radius: 3px;
-            margin: 8px auto 2px auto;
-            opacity: 0.9;
-        }
-
-        .app-icon.flip {
-            transform: scale(1.15) rotate(6deg);
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         #secret-trigger {
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             z-index: 999;
-            background: transparent;
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-container" id="bgContainer"></div>
+
+    <div class="grid-overlay" id="gridOverlay"></div>
+
     <div id="secret-trigger"></div>
 
-    <div class="apps-grid" id="appsGrid"></div>
-
-    <div class="dock-wrapper">
-        <div class="dock-container" id="dockGrid"></div>
-        <div class="home-indicator"></div>
-    </div>
-
     <script>
-        const BG = "#1c1c1e";
+        // Imagen de fondo en Base64
+        const bgBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Reemplazar por tu imagen directa o cargar via URL
 
-        const SVGS = {
-            instagram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD600"/><stop offset="50%" stop-color="#FF0069"/><stop offset="100%" stop-color="#7638FA"/></linearGradient></defs><rect x="14" y="14" width="32" height="32" rx="10" fill="none" stroke="url(#ig)" stroke-width="4"/><circle cx="30" cy="30" r="7.5" fill="none" stroke="url(#ig)" stroke-width="4"/><circle cx="38.5" cy="21.5" r="2.5" fill="#FF0069"/></svg>`,
-            
-            youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ytGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF1A40"/><stop offset="100%" stop-color="#D90022"/></linearGradient></defs><rect x="13" y="18" width="34" height="24" rx="9" fill="url(#ytGrad)"/><polygon points="26,24 37,30 26,36" fill="${BG}"/></svg>`,
-            
-            gmail: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="gmLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF5268"/><stop offset="100%" stop-color="#E51C37"/></linearGradient><linearGradient id="gmMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6370"/><stop offset="100%" stop-color="#FF2E4C"/></linearGradient><linearGradient id="gmRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFC107"/><stop offset="50%" stop-color="#00E676"/><stop offset="100%" stop-color="#2979FF"/></linearGradient></defs><path d="M16 19 C16 16.5 18 15 20 16.5 L30 24 L20 31 L16 28 Z" fill="url(#gmMid)"/><path d="M16 24 L16 41 C16 43 17.5 44 19.5 44 L20 44 L20 27 Z" fill="url(#gmLeft)"/><path d="M30 24 L40 16.5 C42 15 44 16.5 44 19 L44 41 C44 43 42.5 44 40.5 44 L39.5 44 L39.5 27 Z" fill="url(#gmRight)"/></svg>`,
+        document.getElementById('bgContainer').style.backgroundImage = `url('${bgBase64}')`;
 
-            spotify: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="#1DB954"/><path d="M20 23.5c7-1.5 14.5-.8 20.5 2.5" stroke="#121212" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M21.5 30c5.8-1.2 12-.4 17 2.2" stroke="#121212" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M23 36c4.5-.9 9.5-.2 13.5 1.8" stroke="#121212" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`,
-            
-            twitter: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M18 16h6l10 14 11-14h5L37 32l13 18h-6L33 35 21 50h-5l14-17L18 16z" fill="#fff"/></svg>`,
-            
-            tiktok: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(1,0)"><path d="M37 23a10 10 0 0 1-5-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V30a4 4 0 1 0 3.5 4V15h5a10 10 0 0 0 5 8z" fill="#25F4EE"/><path d="M39 25a10 10 0 0 1-7-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V32a4 4 0 1 0 3.5 4V17h5a10 10 0 0 0 5 8z" fill="#FE2C55"/><path d="M38 24a10 10 0 0 1-6-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V31a4 4 0 1 0 3.5 4V16h5a10 10 0 0 0 5 8z" fill="#fff"/></g></svg>`,
-            
-            twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></svg>`,
-            
-            netflix: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M20 14h6v32h-6zM34 14h6v32h-6z" fill="#E50914"/><path d="M20 14l20 32h-6L20 14z" fill="#B81D24"/></svg>`,
-            
-            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g opacity="0.9" transform="translate(30, 30)"><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FF3B30"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FF9500" transform="rotate(45)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FFCC00" transform="rotate(90)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#34C759" transform="rotate(135)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#00C7BE" transform="rotate(180)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#30B0C7" transform="rotate(225)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#007AFF" transform="rotate(270)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#AF52DE" transform="rotate(315)"/></g></svg>`,
-            
-            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="#3a3a3c"/><circle cx="30" cy="30" r="17" fill="#1c1c1e"/><circle cx="30" cy="30" r="14" fill="#2c2c2e"/><circle cx="30" cy="30" r="11" fill="#0f172a"/><path d="M22 22 A10 10 0 0 1 36 20 A8 8 0 0 0 24 28" fill="#ffffff" opacity="0.25"/></svg>`,
-            
-            settings: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30,30) scale(0.95)"><path d="M0 -22 L3 -22 L5 -18 L9 -20 L11 -17 L14 -20 L17 -17 L14 -14 L17 -11 L20 -14 L22 -11 L18 -9 L22 -5 L22 0 L18 3 L20 8 L17 11 L20 14 L17 17 L14 14 L11 17 L14 20 L11 22 L8 18 L5 22 L0 22 L-3 22 L-5 18 L-9 20 L-11 17 L-14 20 L-17 17 L-14 14 L-17 11 L-20 14 L-22 11 L-18 9 L-22 5 L-22 0 L-18 -3 L-20 -8 L-17 -11 L-20 -14 L-17 -17 L-14 -14 L-11 -17 L-14 -20 L-11 -22 L-8 -18 L-5 -22 Z" fill="#8E8E93"/><circle cx="0" cy="0" r="12" fill="${BG}"/><circle cx="0" cy="0" r="6" fill="#8E8E93"/></g></svg>`,
-            
-            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" rx="2" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#555" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#555" stroke-width="2"/><line x1="18" y1="40" x2="32" y2="40" stroke="#555" stroke-width="2"/></svg>`,
-            
-            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="24" cy="24" r="8" fill="#FFD60A"/><path d="M20 38a7 7 0 0 1 0-14 9 9 0 0 1 17 2 6 6 0 0 1-2 12z" fill="#64D2FF" opacity="0.85"/></svg>`,
-            
-            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="8" y="8" width="44" height="44" rx="12" fill="none" stroke="#2c2c2e" stroke-width="1"/><g fill="#8e8e93" font-size="7" font-weight="600" text-anchor="middle"><text x="30" y="18">12</text><text x="44" y="32.5">3</text><text x="30" y="47">6</text><text x="16" y="32.5">9</text></g><line x1="30" y1="30" x2="22" y2="26" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="42" y2="31" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="33" y2="42" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round"/><circle cx="30" cy="30" r="1.5" fill="#ff9f0a"/></svg>`,
-            
-            telegram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="19" fill="#29B6F6"/><path d="M19 29.5l18.5-7.5c1.2-.4 2.2.3 1.8 1.8l-3.2 15c-.2 1-1 1.3-1.8.8l-5.3-3.9-2.5 2.4c-.3.3-.5.5-1 .5l.4-5.3 9.6-8.7c.4-.4-.1-.6-.6-.3l-11.9 7.5-5.1-1.6c-1.1-.3-1.1-1.1.2-1.7z" fill="#fff"/></svg>`,
-            
-            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(10, 14)"><rect x="4" y="2" width="32" height="12" rx="3" fill="#30D158"/><rect x="4" y="7" width="32" height="12" rx="3" fill="#FFD60A"/><rect x="4" y="12" width="32" height="12" rx="3" fill="#0A84FF"/><path d="M0 16 C0 14, 2 13, 5 13 L35 13 C38 13, 40 14, 40 16 L40 30 C40 33, 37 34, 34 34 L6 34 C3 34, 0 33, 0 30 Z" fill="#E5E5EA" opacity="0.95"/><path d="M14 13 C17 13, 18 19, 20 19 C22 19, 23 13, 26 13 Z" fill="#1C1C1E"/></g></svg>`,
-            
-            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30, 30)"><path d="M-12 10 L0 -10 L12 10" stroke="#0A84FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="-14" y1="4" x2="14" y2="4" stroke="#0A84FF" stroke-width="4" stroke-linecap="round"/></g></svg>`,
-            
-            whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 14c-8.8 0-16 7.2-16 16 0 2.8.7 5.5 2.1 7.9L14 46l8.3-2.2c2.3 1.3 5 2 7.7 2 8.8 0 16-7.2 16-16s-7.2-16-16-16zm9.3 22.6c-.4 1.1-2.3 2.1-3.2 2.2-.9.1-2.1.2-3.4-.2-2.1-.7-4.8-2.1-7.2-4.5-3-3-4.5-5.9-5-7.3-.5-1.4 0-2.8.5-3.3.4-.5.9-.6 1.2-.6h.9c.3 0 .7 0 1 .7l1.4 3.4c.1.3.1.6 0 .9l-.5.9c-.2.2-.3.4-.1.8.5.9 1.5 2.2 2.9 3.4 1.8 1.6 3.3 2.1 4.2 2.5.4.2.6.1.8-.1l1.1-1.3c.3-.4.7-.5 1-.3l3.2 1.5c.4.2.6.4.6.8 0 .4-.2 1.5-.7 2z" fill="#25D366"/></svg>`,
-            
-            google: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M41.6 30.2c0-1-.1-1.8-.3-2.6H30v5h6.6c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.5-5.2 3.5-9.2z" fill="#4285F4"/><path d="M30 42c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.2 0-5.8-2.1-6.8-5h-4v3.1C21.2 39.1 25.3 42 30 42z" fill="#34A853"/><path d="M23.2 32.1c-.2-.7-.4-1.4-.4-2.1s.2-1.4.4-2.1v-3.1h-4C18.4 26.4 18 28.2 18 30s.4 3.6 1.2 5.2l4-3.1z" fill="#FBBC05"/><path d="M30 21.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C35.9 18.4 33.2 17.5 30 17.5c-4.7 0-8.8 2.9-10.8 6.8l4 3.1c1-2.9 3.6-5.6 6.8-5.6z" fill="#EA4335"/></svg>`,
-            
-            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(11, 14)"><path d="M31.2 3.2s-2.8-1.3-5.8-1.6c-.3.5-.6 1.1-.8 1.6-3.2-.5-6.4-.5-9.6 0-.2-.5-.5-1.1-.8-1.6-3 .3-5.8 1.6-5.8 1.6S3 10.3 3 18.6c2.1 1.5 4.1 2.5 6.2 3.2.5-.7.9-1.4 1.3-2.1-1.1-.4-2.2-.9-3.1-1.6.3-.2.5-.4.7-.6 5.9 2.7 12.3 2.7 18.1 0 .2.2.5.4.7.6-.9.7-2 1.2-3.1 1.6.4.7.8 1.4 1.3 2.1 2.1-.7 4.1-1.7 6.2-3.2 0-8.3-4.6-15.4-4.6-15.4zM12.7 15.3c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-.9 2.5-2.2 2.5zm12.6 0c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-1 2.5-2.2 2.5z" fill="#5865F2"/></g></svg>`,
+        const calcSVG = `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><circle cx="30" cy="30" r="18" fill="#ff9f0a"/><text x="30" y="41" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`;
 
-            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="18" fill="#ff9f0a"/><text x="30" y="41" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
-
-            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(15, 15)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158" transform="scale(1.1)"/></g></svg>`,
-            
-            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="none" stroke="#0a84ff" stroke-width="2.5"/><polygon points="30,12 36,28 30,30" fill="#ff453a"/><polygon points="30,48 24,32 30,30" fill="#fff"/></svg>`,
-            
-            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 14c-8.3 0-15 5.8-15 13 0 4.2 2.3 8 5.9 10.4l-1.5 5.6 5.9-3.1c1.5.4 3.1.7 4.7.7 8.3 0 15-5.8 15-13s-6.7-13-15-13z" fill="#30d158"/></svg>`,
-            
-            music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#ff375f"/></svg>`
-        };
-
-        const initialApps = [
-            { id: 'instagram', name: 'Instagram', svg: SVGS.instagram },
-            { id: 'youtube', name: 'YouTube', svg: SVGS.youtube },
-            { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp },
-            { id: 'tiktok', name: 'TikTok', svg: SVGS.tiktok },
-            { id: 'spotify', name: 'Spotify', svg: SVGS.spotify },
-            { id: 'twitter', name: 'X / Twitter', svg: SVGS.twitter },
-            { id: 'twitch', name: 'Twitch', svg: SVGS.twitch },
-            { id: 'netflix', name: 'Netflix', svg: SVGS.netflix },
-            { id: 'photos', name: 'Fotos', svg: SVGS.photos },
-            { id: 'camera', name: 'Cámara', svg: SVGS.camera },
-            { id: 'settings', name: 'Ajustes', svg: SVGS.settings },
-            { id: 'weather', name: 'Tiempo', svg: SVGS.weather },
-            { id: 'clock', name: 'Reloj', svg: SVGS.clock },
-            { id: 'telegram', name: 'Telegram', svg: SVGS.telegram },
-            { id: 'notes', name: 'Notas', svg: SVGS.notes },
-            { id: 'gmail', name: 'Gmail', svg: SVGS.gmail },
-            { id: 'discord', name: 'Discord', svg: SVGS.discord },
-            { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
-            { id: 'appstore', name: 'App Store', svg: SVGS.appstore },
-            { id: 'google', name: 'Google', svg: SVGS.google }
-        ];
-
-        const intruderApp = { id: 'calculator', name: 'Calculadora', svg: SVGS.calculator };
-
-        const dockApps = [
-            { id: 'phone', name: 'Teléfono', svg: SVGS.phone },
-            { id: 'safari', name: 'Safari', svg: SVGS.safari },
-            { id: 'messages', name: 'Mensajes', svg: SVGS.messages },
-            { id: 'music', name: 'Música', svg: SVGS.music }
-        ];
-
-        let thoughtApp = null;
+        let selectedAppIndex = null;
         let isTransformed = false;
 
-        function renderApps() {
-            const grid = document.getElementById('appsGrid');
-            grid.innerHTML = '';
-            
-            initialApps.forEach((app) => {
-                const el = document.createElement('div');
-                el.className = 'app-item';
-                el.onclick = () => onAppTapped(app, el);
+        const gridOverlay = document.getElementById('gridOverlay');
 
-                el.innerHTML = `
-                    <div class="app-icon">${app.svg}</div>
-                    <div class="app-name">${app.name}</div>
-                `;
-                grid.appendChild(el);
+        for (let i = 0; i < 20; i++) {
+            const zone = document.createElement('div');
+            zone.className = 'app-touch-zone';
+            zone.dataset.index = i;
+
+            const calcDiv = document.createElement('div');
+            calcDiv.className = 'calc-icon';
+            calcDiv.innerHTML = calcSVG;
+            zone.appendChild(calcDiv);
+
+            zone.addEventListener('click', () => {
+                if (selectedAppIndex !== null) return;
+                selectedAppIndex = i;
+                zone.classList.add('show-calc');
+                if (navigator.vibrate) navigator.vibrate(50);
             });
 
-            const dock = document.getElementById('dockGrid');
-            dock.innerHTML = '';
-            dockApps.forEach((app) => {
-                const el = document.createElement('div');
-                el.className = 'app-item';
-                el.innerHTML = `<div class="app-icon">${app.svg}</div>`;
-                dock.appendChild(el);
-            });
-        }
-
-        function onAppTapped(app, element) {
-            if (thoughtApp) return;
-
-            thoughtApp = app;
-
-            const iconDiv = element.querySelector('.app-icon');
-            const nameDiv = element.querySelector('.app-name');
-
-            iconDiv.classList.add('flip');
-
-            setTimeout(() => {
-                iconDiv.innerHTML = intruderApp.svg;
-                if (nameDiv) nameDiv.textContent = intruderApp.name;
-                iconDiv.classList.remove('flip');
-            }, 180);
-
-            if (navigator.vibrate) navigator.vibrate(50);
+            gridOverlay.appendChild(zone);
         }
 
         function triggerWaveTransformation() {
-            if (!thoughtApp || isTransformed) return;
+            if (selectedAppIndex === null || isTransformed) return;
             isTransformed = true;
 
-            const allAppElements = document.querySelectorAll('.apps-grid .app-item, .dock-container .app-item');
-            
-            allAppElements.forEach((el, index) => {
+            const allZones = document.querySelectorAll('.app-touch-zone');
+
+            allZones.forEach((zone, index) => {
                 setTimeout(() => {
-                    const iconDiv = el.querySelector('.app-icon');
-                    const nameDiv = el.querySelector('.app-name');
-
-                    iconDiv.innerHTML = thoughtApp.svg;
-                    iconDiv.classList.add('flip');
-
-                    if (nameDiv) {
-                        nameDiv.textContent = thoughtApp.name;
-                    }
-
-                    setTimeout(() => iconDiv.classList.remove('flip'), 250);
-
+                    zone.classList.add('show-calc');
                     if (navigator.vibrate) navigator.vibrate(20);
-                }, index * 110);
+                }, index * 80);
             });
         }
 
@@ -302,8 +166,6 @@
                 triggerWaveTransformation();
             }
         });
-
-        renderApps();
     </script>
 </body>
 </html>
