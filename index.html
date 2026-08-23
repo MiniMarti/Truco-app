@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>iOS Dark Icons Fixed</title>
+    <title>iOS Home Screen</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -21,23 +21,31 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background-color: #000;
+            background-color: #000000;
         }
 
         body {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: env(safe-area-inset-top, 50px) 20px calc(env(safe-area-inset-bottom, 10px) + 5px) 20px;
+            padding: env(safe-area-inset-top, 45px) 20px calc(env(safe-area-inset-bottom, 15px) + 5px) 20px;
             position: relative;
+        }
+
+        .apps-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 380px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 18px 14px;
-            margin-top: 15px;
-            z-index: 1;
+            gap: 20px 14px;
         }
 
         .app-item {
@@ -47,17 +55,23 @@
             cursor: pointer;
         }
 
+        .app-icon-wrapper {
+            position: relative;
+            width: 62px;
+            height: 62px;
+        }
+
         .app-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 15px;
+            width: 100%;
+            height: 100%;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
         .app-icon svg {
@@ -71,40 +85,77 @@
             font-size: 11px;
             margin-top: 5px;
             text-align: center;
-            font-weight: 500;
+            font-weight: 400;
             letter-spacing: -0.2px;
             white-space: nowrap;
         }
 
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #FF3B30;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 1px 5px;
+            border-radius: 10px;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .page-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 15px 0 5px 0;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .dot.active {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
         .dock-wrapper {
             width: 100%;
-            z-index: 1;
+            max-width: 380px;
+            margin: 0 auto;
         }
 
         .dock-container {
-            background: rgba(30, 30, 32, 0.75);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
-            border-radius: 35px;
-            padding: 12px 14px;
+            border-radius: 32px;
+            padding: 10px 12px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 14px;
-            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
         }
 
         .app-icon.flip {
-            transform: scale(1.15) rotate(6deg);
+            transform: scale(1.15) rotate(5deg);
         }
 
         #secret-trigger {
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             z-index: 999;
-            background: transparent;
         }
     </style>
 </head>
@@ -112,7 +163,15 @@
 
     <div id="secret-trigger"></div>
 
-    <div class="apps-grid" id="appsGrid"></div>
+    <div class="apps-container">
+        <div class="apps-grid" id="appsGrid"></div>
+        <div class="page-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
 
     <div class="dock-wrapper">
         <div class="dock-container" id="dockGrid"></div>
@@ -124,176 +183,170 @@
         const SVGS = {
             instagram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD600"/><stop offset="50%" stop-color="#FF0069"/><stop offset="100%" stop-color="#7638FA"/></linearGradient></defs><rect x="10" y="10" width="40" height="40" rx="12" fill="none" stroke="url(#ig)" stroke-width="4.5"/><circle cx="30" cy="30" r="9.5" fill="none" stroke="url(#ig)" stroke-width="4.5"/><circle cx="40" cy="20" r="3" fill="#FF0069"/></svg>`,
             
-            youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ytGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF1A40"/><stop offset="100%" stop-color="#D90022"/></linearGradient></defs><rect x="8" y="14" width="44" height="32" rx="11" fill="url(#ytGrad)"/><polygon points="25,22 39,30 25,38" fill="${BG}"/></svg>`,
-            
-            // FaceTime actualizado con el cuerpo verde más ancho horizontalmente
-            facetime: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ftGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#34C759"/><stop offset="100%" stop-color="#248A3D"/></linearGradient></defs><rect x="9" y="16" width="27" height="28" rx="8" fill="url(#ftGrad)"/><path d="M 39 21.5 L 49 15 C 49.5 14.6 50 15 50 15.6 L 50 44.4 C 50 45 49.5 45.4 49 45 L 39 38.5 Z" fill="url(#ftGrad)"/></svg>`,
-
-            spotify: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="#1DB954"/><path d="M18 22c8-1.7 17-.9 24 3" stroke="#121212" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M20 30c6.5-1.4 13.5-.5 19 2.5" stroke="#121212" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M22 37c5.2-1 10.8-.2 15.2 2" stroke="#121212" stroke-width="3" stroke-linecap="round" fill="none"/></svg>`,
-            
-            twitter: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M14 12h8l12 17 13-17h6L36 31l15 21h-8L30 34 17 52h-6l16-20L14 12z" fill="#fff"/></svg>`,
-            
-            tiktok: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000000"/><g transform="translate(14, 11)"><path d="M 23.3 12.8 C 21.0 12.7 18.8 11.7 17.2 10.0 C 16.8 9.6 16.4 9.1 16.1 8.6 L 16.1 23.8 C 16.1 26.2 15.3 28.5 13.8 30.3 C 12.3 32.2 10.1 33.3 7.7 33.5 C 5.3 33.7 2.9 32.9 1.2 31.3 C -0.5 29.7 -1.2 27.3 -0.9 24.9 C -0.6 22.5 0.7 20.4 2.6 19.1 C 4.5 17.8 6.9 17.4 9.2 18.0 L 9.2 24.0 C 8.2 23.6 7.0 23.6 6.0 24.1 C 5.0 24.6 4.3 25.5 4.1 26.6 C 3.9 27.7 4.2 28.8 5.0 29.6 C 5.8 30.4 6.9 30.7 8.0 30.5 C 9.1 30.2 10.0 29.3 10.3 28.2 C 10.5 27.7 10.6 27.1 10.6 26.5 L 10.6 0 L 16.1 0 C 16.1 2.2 16.9 4.3 18.4 5.9 C 19.9 7.5 21.9 8.4 24.1 8.5 L 24.1 13.9 C 23.8 12.8 23.5 12.8 23.3 12.8 Z" fill="#00f2fe"/><path d="M 25.3 14.8 C 23.0 14.7 20.8 13.7 19.2 12.0 C 18.8 11.6 18.4 11.1 18.1 10.6 L 18.1 25.8 C 18.1 28.2 17.3 30.5 15.8 32.3 C 14.3 34.2 12.1 35.3 9.7 35.5 C 7.3 35.7 4.9 34.9 3.2 33.3 C 1.5 31.7 0.8 29.3 1.1 26.9 C 1.4 24.5 2.7 22.4 4.6 21.1 C 6.5 19.8 8.9 19.4 11.2 20.0 L 11.2 26.0 C 10.2 25.6 9.0 25.6 8.0 26.1 C 7.0 26.6 6.3 27.5 6.1 28.6 C 5.9 29.7 6.2 30.8 7.0 31.6 C 7.8 32.4 8.9 32.7 10.0 32.5 C 11.1 32.2 12.0 31.3 12.3 30.2 C 12.5 29.7 12.6 29.1 12.6 28.5 L 12.6 2.0 L 18.1 2.0 C 18.1 4.2 18.9 6.3 20.4 7.9 C 21.9 9.5 23.9 10.4 26.1 10.5 L 26.1 15.9 C 25.8 14.8 25.5 14.8 25.3 14.8 Z" fill="#ff0050"/><path d="M 24.3 13.8 C 22.0 13.7 19.8 12.7 18.2 11.0 C 17.8 10.6 17.4 10.1 17.1 9.6 L 17.1 24.8 C 17.1 27.2 16.3 29.5 14.8 31.3 C 13.3 33.2 11.1 34.3 8.7 34.5 C 6.3 34.7 3.9 33.9 2.2 32.3 C 0.5 30.7 -0.2 28.3 0.1 25.9 C 0.4 23.5 1.7 21.4 3.6 20.1 C 5.5 18.8 7.9 18.4 10.2 19.0 L 10.2 25.0 C 9.2 24.6 8.0 24.6 7.0 25.1 C 6.0 25.6 5.3 26.5 5.1 27.6 C 4.9 28.7 5.2 29.8 6.0 30.6 C 6.8 31.4 7.9 31.7 9.0 31.5 C 10.1 31.2 11.0 30.3 11.3 29.2 C 11.5 28.7 11.6 28.1 11.6 27.5 L 11.6 1.0 L 17.1 1.0 C 17.1 3.2 17.9 5.3 19.4 6.9 C 20.9 8.5 22.9 9.4 25.1 9.5 L 25.1 14.9 C 24.8 13.8 24.5 13.8 24.3 13.8 Z" fill="#ffffff"/></g></svg>`,
-            
-            twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></g></svg>`,
-            
-            netflix: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M20 14h6v32h-6zM34 14h6v32h-6z" fill="#E50914"/><path d="M20 14l20 32h-6L20 14z" fill="#B81D24"/></g></svg>`,
-            
-            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><g transform="translate(30, 30) scale(1.1)" opacity="0.95"><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FF2D55"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FF9500" transform="rotate(45)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FFCC00" transform="rotate(90)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#4CD964" transform="rotate(135)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#5AC8FA" transform="rotate(180)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#007AFF" transform="rotate(225)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#5856D6" transform="rotate(270)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#C760E8" transform="rotate(315)"/></g></svg>`,
-            
-            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="#3a3a3c"/><circle cx="30" cy="30" r="19.5" fill="#1c1c1e"/><circle cx="30" cy="30" r="16" fill="#2c2c2e"/><circle cx="30" cy="30" r="12.5" fill="#0f172a"/><path d="M22 22 A10 10 0 0 1 36 20 A8 8 0 0 0 24 28" fill="#ffffff" opacity="0.25"/></svg>`,
-            
-            settings: `<svg viewBox="0 0 60 60"><defs><linearGradient id="settBg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3A3A3C"/><stop offset="100%" stop-color="#1C1C1E"/></linearGradient><linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="50%" stop-color="#8E8E93"/><stop offset="100%" stop-color="#D1D1D6"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#settBg)"/><g transform="translate(30, 30)"><circle cx="0" cy="0" r="23" fill="none" stroke="#545458" stroke-width="2.5" stroke-dasharray="2, 3.5"/><circle cx="0" cy="0" r="18" fill="none" stroke="url(#metal)" stroke-width="3" stroke-dasharray="2.5, 2.2"/><circle cx="0" cy="0" r="13" fill="none" stroke="#3A3A3C" stroke-width="2.5"/><circle cx="0" cy="0" r="13" fill="none" stroke="url(#metal)" stroke-width="1.2"/><g stroke="url(#metal)" stroke-width="2.8" stroke-linecap="round"><line x1="0" y1="0" x2="0" y2="-12"/><line x1="0" y1="0" x2="10.4" y2="6"/><line x1="0" y1="0" x2="-10.4" y2="6"/></g><circle cx="0" cy="0" r="3" fill="#1C1C1E" stroke="url(#metal)" stroke-width="1.5"/></g></svg>`,
-            
-            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" rx="2" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#555" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#555" stroke-width="2"/><line x1="18" y1="40" x2="32" y2="40" stroke="#555" stroke-width="2"/></g></svg>`,
-            
-            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.15) translate(-3.8,-3.8)"><circle cx="24" cy="24" r="9.5" fill="#FFD60A"/><path d="M18 40a8 8 0 0 1 0-16 10 10 0 0 1 19 2 7 7 0 0 1-2 14z" fill="#64D2FF" opacity="0.9"/></g></svg>`,
-            
-            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="6" y="6" width="48" height="48" rx="14" fill="none" stroke="#2c2c2e" stroke-width="1.2"/><g fill="#8e8e93" font-size="7.5" font-weight="600" text-anchor="middle"><text x="30" y="17">12</text><text x="45" y="32.5">3</text><text x="30" y="48">6</text><text x="15" y="32.5">9</text></g><line x1="30" y1="30" x2="21" y2="25" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><line x1="30" y1="30" x2="43" y2="31" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><line x1="30" y1="30" x2="33" y2="44" stroke="#ff9f0a" stroke-width="1.8" stroke-linecap="round"/><circle cx="30" cy="30" r="1.8" fill="#ff9f0a"/></svg>`,
-            
             telegram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="22" fill="#29B6F6"/><path d="M17 29.5l21-8.5c1.3-.5 2.5.3 2 2l-3.6 17c-.2 1.1-1.1 1.5-2 .9l-6-4.4-2.8 2.7c-.3.3-.6.6-1.1.6l.5-6 10.9-9.8c.5-.4-.1-.7-.7-.3l-13.5 8.5-5.8-1.8c-1.2-.4-1.2-1.2.2-1.9z" fill="#fff"/></svg>`,
-            
-            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(8, 12) scale(1.1)"><rect x="4" y="2" width="32" height="12" rx="3" fill="#30D158"/><rect x="4" y="7" width="32" height="12" rx="3" fill="#FFD60A"/><rect x="4" y="12" width="32" height="12" rx="3" fill="#0A84FF"/><path d="M0 16 C0 14, 2 13, 5 13 L35 13 C38 13, 40 14, 40 16 L40 30 C40 33, 37 34, 34 34 L6 34 C3 34, 0 33, 0 30 Z" fill="#E5E5EA" opacity="0.95"/><path d="M14 13 C17 13, 18 19, 20 19 C22 19, 23 13, 26 13 Z" fill="#1C1C1E"/></g></svg>`,
-            
-            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30, 30) scale(1.15)" stroke="#0A84FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-12 10 L0 -10 L12 10"/><line x1="-14" y1="4" x2="14" y2="4"/></g></svg>`,
-            
-            whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 11c-10.5 0-19 8.5-19 19 0 3.3.8 6.6 2.5 9.5L11 49l9.8-2.6c2.8 1.5 5.9 2.4 9.2 2.4 10.5 0 19-8.5 19-19S40.5 11 30 11zm11 26.8c-.5 1.3-2.7 2.5-3.8 2.6-1.1.1-2.5.2-4-.2-2.5-.8-5.7-2.5-8.5-5.3-3.5-3.5-5.3-7-5.9-8.7-.6-1.7 0-3.3.6-3.9.5-.6 1.1-.7 1.4-.7h1.1c.4 0 .8 0 1.2.8l1.6 4c.2.4.2.8 0 1.1l-.6 1.1c-.2.3-.4.5-.2 1 .6 1.1 1.8 2.6 3.4 4 2.1 1.9 3.9 2.5 5 3 .5.2.7.1 1-.1l1.3-1.5c.4-.5.8-.6 1.2-.4l3.8 1.8c.5.2.7.5.7 .9 0 .5-.3 1.8-.8 2.4z" fill="#25D366"/></svg>`,
-            
-            google: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.3) translate(-7,-7)"><path d="M41.6 30.2c0-1-.1-1.8-.3-2.6H30v5h6.6c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.5-5.2 3.5-9.2z" fill="#4285F4"/><path d="M30 42c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.2 0-5.8-2.1-6.8-5h-4v3.1C21.2 39.1 25.3 42 30 42z" fill="#34A853"/><path d="M23.2 32.1c-.2-.7-.4-1.4-.4-2.1s.2-1.4.4-2.1v-3.1h-4C18.4 26.4 18 28.2 18 30s.4 3.6 1.2 5.2l4-3.1z" fill="#FBBC05"/><path d="M30 21.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C35.9 18.4 33.2 17.5 30 17.5c-4.7 0-8.8 2.9-10.8 6.8l4 3.1c1-2.9 3.6-5.6 6.8-5.6z" fill="#EA4335"/></g></svg>`,
-            
-            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#5865F2"/><g transform="translate(10, 14) scale(1.1)"><path d="M27.0 2.2 C25.0 1.2 22.8 0.5 20.5 0 C20.2 0.5 19.9 1.1 19.6 1.7 C17.1 1.3 14.6 1.3 12.1 1.7 C11.8 1.1 11.5 0.5 11.2 0 C8.9 0.5 6.7 1.2 4.7 2.2 C0.7 8.1 -0.4 13.9 0.1 19.6 C2.8 21.6 5.3 22.8 7.8 23.6 C8.4 22.8 8.9 22.0 9.4 21.1 C8.5 20.7 7.6 20.2 6.8 19.6 C7.0 19.4 7.2 19.2 7.4 19.0 C12.2 21.2 17.4 21.2 22.2 19.0 C22.4 19.2 22.6 19.4 22.8 19.6 C22.0 20.2 21.1 20.7 20.2 21.1 C20.7 22.0 21.2 22.8 21.8 23.6 C24.3 22.8 26.9 21.6 29.5 19.6 C30.1 13.0 28.5 7.3 27.0 2.2 Z" fill="#FFFFFF"/><circle cx="10" cy="11.5" r="2.5" fill="#5865F2"/><circle cx="20" cy="11.5" r="2.5" fill="#5865F2"/></g></svg>`,
 
-            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="22" fill="#ff9f0a"/><text x="30" y="42" font-size="38" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
+            // TikTok con grosor corregido y ensanchado
+            tiktok: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000000"/><g transform="translate(13, 10)"><path d="M26.5 13.2c-2.2-.1-4.3-1.1-5.8-2.7-.4-.4-.8-.9-1.1-1.4v16.1c0 3.2-.9 6.3-2.6 8.8-1.7 2.5-4.2 4-7 4.2-2.8.2-5.5-.8-7.5-2.8-2-2-3-4.7-2.7-7.5.3-2.8 1.8-5.3 4.1-6.9 2.3-1.6 5.1-2 7.7-1.3v6.7c-1-.5-2.2-.6-3.3-.2-1.1.4-1.9 1.3-2.2 2.4-.3 1.1 0 2.3.8 3.1.8.8 1.9 1.2 3 1.1 1.1-.1 2.1-.8 2.5-1.8.3-.5.4-1.1.4-1.7V0h6.1c0 2.5 1 4.9 2.7 6.8 1.7 1.9 4.1 3 6.6 3.1v6.3z" fill="#00f2fe"/><path d="M28.5 15.2c-2.2-.1-4.3-1.1-5.8-2.7-.4-.4-.8-.9-1.1-1.4v16.1c0 3.2-.9 6.3-2.6 8.8-1.7 2.5-4.2 4-7 4.2-2.8.2-5.5-.8-7.5-2.8-2-2-3-4.7-2.7-7.5.3-2.8 1.8-5.3 4.1-6.9 2.3-1.6 5.1-2 7.7-1.3v6.7c-1-.5-2.2-.6-3.3-.2-1.1.4-1.9 1.3-2.2 2.4-.3 1.1 0 2.3.8 3.1.8.8 1.9 1.2 3 1.1 1.1-.1 2.1-.8 2.5-1.8.3-.5.4-1.1.4-1.7V2h6.1c0 2.5 1 4.9 2.7 6.8 1.7 1.9 4.1 3 6.6 3.1v6.3z" fill="#ff0050"/><path d="M27.5 14.2c-2.2-.1-4.3-1.1-5.8-2.7-.4-.4-.8-.9-1.1-1.4v16.1c0 3.2-.9 6.3-2.6 8.8-1.7 2.5-4.2 4-7 4.2-2.8.2-5.5-.8-7.5-2.8-2-2-3-4.7-2.7-7.5.3-2.8 1.8-5.3 4.1-6.9 2.3-1.6 5.1-2 7.7-1.3v6.7c-1-.5-2.2-.6-3.3-.2-1.1.4-1.9 1.3-2.2 2.4-.3 1.1 0 2.3.8 3.1.8.8 1.9 1.2 3 1.1 1.1-.1 2.1-.8 2.5-1.8.3-.5.4-1.1.4-1.7V1h6.1c0 2.5 1 4.9 2.7 6.8 1.7 1.9 4.1 3 6.6 3.1v6.3z" fill="#ffffff"/></g></svg>`,
+
+            // Spotify con trazados y ondas centradas
+            spotify: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="#1DB954"/><path d="M17 21c7.5-2 18.5-1 26 3.5" stroke="#121212" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M19.5 28.5c6-1.5 15-.8 21 3" stroke="#121212" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M22 36c4.5-1 11-.3 16 1.8" stroke="#121212" stroke-width="3" stroke-linecap="round" fill="none"/></svg>`,
+            
+            youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ytGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF1A40"/><stop offset="100%" stop-color="#D90022"/></linearGradient></defs><rect x="8" y="14" width="44" height="32" rx="11" fill="url(#ytGrad)"/><polygon points="25,22 39,30 25,38" fill="${BG}"/></svg>`,
+
+            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="#3a3a3c"/><circle cx="30" cy="30" r="19.5" fill="#1c1c1e"/><circle cx="30" cy="30" r="16" fill="#2c2c2e"/><circle cx="30" cy="30" r="12.5" fill="#0f172a"/><path d="M22 22 A10 10 0 0 1 36 20 A8 8 0 0 0 24 28" fill="#ffffff" opacity="0.25"/></svg>`,
+
+            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.15) translate(-3.8,-3.8)"><circle cx="24" cy="24" r="9.5" fill="#FFD60A"/><path d="M18 40a8 8 0 0 1 0-16 10 10 0 0 1 19 2 7 7 0 0 1-2 14z" fill="#64D2FF" opacity="0.9"/></g></svg>`,
+
+            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 11c-10 0-18 6.9-18 15.5 0 5 2.8 9.5 7.1 12.4l-1.8 6.7 7.1-3.7c2.4.8 3.7.8 5.6.8 10 0 18-6.9 18-15.5S40 11 30 11z" fill="#30d158"/></svg>`,
+
+            twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></g></svg>`,
+
+            chatgpt: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.7,-2.7)"><path d="M37.5 22.8c-.3-1.6-1-3.1-2.1-4.3-2.1-2.2-5.3-3-8.2-2.1-1.4.4-2.7 1.2-3.7 2.3-.9 1-.2 2.7 1.2 2.7h1.4c1.8 0 3.4 1 4.2 2.6.8 1.6.6 3.5-.4 4.9l-1.1 1.5c-1 1.3-1 3.1 0 4.4 1 1.3 2.7 1.8 4.2 1.3 2.8-.9 4.6-3.7 4.3-6.7-.1-1.3-.6-2.5-1.4-3.5 1.1-.3 2.1-.9 2.8-1.8.8-.9 1.2-2 1.3-3.2z" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`,
+
+            settings: `<svg viewBox="0 0 60 60"><defs><linearGradient id="settBg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3A3A3C"/><stop offset="100%" stop-color="#1C1C1E"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#settBg)"/><g transform="translate(30, 30)"><circle cx="0" cy="0" r="18" fill="none" stroke="#d1d1d6" stroke-width="3" stroke-dasharray="2.5, 2.2"/><circle cx="0" cy="0" r="13" fill="#3A3A3C"/><circle cx="0" cy="0" r="13" fill="none" stroke="#d1d1d6" stroke-width="1.2"/><g stroke="#d1d1d6" stroke-width="2.8" stroke-linecap="round"><line x1="0" y1="0" x2="0" y2="-12"/><line x1="0" y1="0" x2="10.4" y2="6"/><line x1="0" y1="0" x2="-10.4" y2="6"/></g><circle cx="0" cy="0" r="3" fill="#1C1C1E" stroke="#d1d1d6" stroke-width="1.5"/></g></svg>`,
+
+            whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 11c-10.5 0-19 8.5-19 19 0 3.3.8 6.6 2.5 9.5L11 49l9.8-2.6c2.8 1.5 5.9 2.4 9.2 2.4 10.5 0 19-8.5 19-19S40.5 11 30 11zm11 26.8c-.5 1.3-2.7 2.5-3.8 2.6-1.1.1-2.5.2-4-.2-2.5-.8-5.7-2.5-8.5-5.3-3.5-3.5-5.3-7-5.9-8.7-.6-1.7 0-3.3.6-3.9.5-.6 1.1-.7 1.4-.7h1.1c.4 0 .8 0 1.2.8l1.6 4c.2.4.2.8 0 1.1l-.6 1.1c-.2.3-.4.5-.2 1 .6 1.1 1.8 2.6 3.4 4 2.1 1.9 3.9 2.5 5 3 .5.2.7.1 1-.1l1.3-1.5c.4-.5.8-.6 1.2-.4l3.8 1.8c.5.2.7.5.7 .9 0 .5-.3 1.8-.8 2.4z" fill="#25D366"/></svg>`,
+
+            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30, 30) scale(1.15)" stroke="#0A84FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-12 10 L0 -10 L12 10"/><line x1="-14" y1="4" x2="14" y2="4"/></g></svg>`,
+
+            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><g transform="translate(30, 30) scale(1.1)"><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FF2D55"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FF9500" transform="rotate(45)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#FFCC00" transform="rotate(90)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#4CD964" transform="rotate(135)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#5AC8FA" transform="rotate(180)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#007AFF" transform="rotate(225)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#5856D6" transform="rotate(270)"/><path d="M 0,-19 C 5,-19 9,-15 9,-10 C 9,-3 0,0 0,0 C 0,0 -9,-3 -9,-10 C -9,-15 -5,-19 0,-19 Z" fill="#C760E8" transform="rotate(315)"/></g></svg>`,
+
+            google: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.3) translate(-7,-7)"><path d="M41.6 30.2c0-1-.1-1.8-.3-2.6H30v5h6.6c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.5-5.2 3.5-9.2z" fill="#4285F4"/><path d="M30 42c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.2 0-5.8-2.1-6.8-5h-4v3.1C21.2 39.1 25.3 42 30 42z" fill="#34A853"/><path d="M23.2 32.1c-.2-.7-.4-1.4-.4-2.1s.2-1.4.4-2.1v-3.1h-4C18.4 26.4 18 28.2 18 30s.4 3.6 1.2 5.2l4-3.1z" fill="#FBBC05"/><path d="M30 21.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C35.9 18.4 33.2 17.5 30 17.5c-4.7 0-8.8 2.9-10.8 6.8l4 3.1c1-2.9 3.6-5.6 6.8-5.6z" fill="#EA4335"/></g></svg>`,
+
+            gmail: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(10, 15) scale(1.1)"><path d="M36 4l-16 12L4 4v28h8V16l8 6 8-6v16h8V4z" fill="#EA4335"/><path d="M36 4l-16 12L4 4h4l12 9L32 4h4z" fill="#4285F4"/><path d="M4 32V16l8 6v10H4z" fill="#34A853"/><path d="M36 32V16l-8 6v10h8z" fill="#FBBC05"/></g></svg>`,
+
+            archivos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(12, 13) scale(1.1)"><path d="M2 6C2 4.3 3.3 3 5 3h10l4 4h15c1.7 0 3 1.3 3 3v19c0 1.7-1.3 3-3 3H5c-1.7 0-3-1.3-3-3V6z" fill="#188038"/><path d="M2 12c0-1.7 1.3-3 3-3h26c1.7 0 3 1.3 3 3v19c0 1.7-1.3 3-3 3H5c-1.7 0-3-1.3-3-3V12z" fill="#4285F4"/></g></svg>`,
+
+            contactos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="22" r="8" fill="#a1a1a6"/><path d="M15 45c0-8 6-12 15-12s15 4 15 12z" fill="#a1a1a6"/></svg>`,
+
+            cartera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(8, 12) scale(1.1)"><rect x="4" y="2" width="32" height="12" rx="3" fill="#30D158"/><rect x="4" y="7" width="32" height="12" rx="3" fill="#FFD60A"/><rect x="4" y="12" width="32" height="12" rx="3" fill="#0A84FF"/><path d="M0 16 C0 14, 2 13, 5 13 L35 13 C38 13, 40 14, 40 16 L40 30 C40 33, 37 34, 34 34 L6 34 C3 34, 0 33, 0 30 Z" fill="#E5E5EA" opacity="0.95"/></g></svg>`,
+
+            notas: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" rx="2" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#555" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#555" stroke-width="2"/></g></svg>`,
 
             phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(13, 13) scale(1.25)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158"/></g></svg>`,
-            
-            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="none" stroke="#0a84ff" stroke-width="3"/><polygon points="30,9 37,28 30,30" fill="#ff453a"/><polygon points="30,51 23,32 30,30" fill="#fff"/></svg>`,
-            
-            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 11c-10 0-18 6.9-18 15.5 0 5 2.8 9.5 7.1 12.4l-1.8 6.7 7.1-3.7c2.4.8 3.7.8 5.6.8 10 0 18-6.9 18-15.5S40 11 30 11z" fill="#30d158"/></svg>`,
-            
-            music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.15) translate(-3.8,-3.8)"><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#ff375f"/></g></svg>`
+
+            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="none" stroke="#0a84ff" stroke-width="3"/><polygon points="30,9 37,28 30,30" fill="#ff453a"/><polygon points="30,51 23,32 30,30" fill="#fff"/></svg>`
         };
 
-        const initialApps = [
-            { id: 'instagram', name: 'Instagram', svg: SVGS.instagram },
-            { id: 'youtube', name: 'YouTube', svg: SVGS.youtube },
-            { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp },
-            { id: 'tiktok', name: 'TikTok', svg: SVGS.tiktok },
-            { id: 'spotify', name: 'Spotify', svg: SVGS.spotify },
-            { id: 'twitter', name: 'X / Twitter', svg: SVGS.twitter },
-            { id: 'twitch', name: 'Twitch', svg: SVGS.twitch },
-            { id: 'netflix', name: 'Netflix', svg: SVGS.netflix },
-            { id: 'photos', name: 'Fotos', svg: SVGS.photos },
-            { id: 'camera', name: 'Cámara', svg: SVGS.camera },
-            { id: 'settings', name: 'Ajustes', svg: SVGS.settings },
-            { id: 'weather', name: 'Tiempo', svg: SVGS.weather },
-            { id: 'clock', name: 'Reloj', svg: SVGS.clock },
-            { id: 'telegram', name: 'Telegram', svg: SVGS.telegram },
-            { id: 'notes', name: 'Notas', svg: SVGS.notes },
-            { id: 'facetime', name: 'FaceTime', svg: SVGS.facetime },
-            { id: 'discord', name: 'Discord', svg: SVGS.discord },
-            { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
-            { id: 'appstore', name: 'App Store', svg: SVGS.appstore },
-            { id: 'google', name: 'Google', svg: SVGS.google }
+        const apps = [
+            { id: 'instagram', name: 'Instagram', svg: SVGS.instagram, badge: '1' },
+            { id: 'telegram', name: 'Telegram', svg: SVGS.telegram, badge: null },
+            { id: 'tiktok', name: 'TikTok', svg: SVGS.tiktok, badge: null },
+            { id: 'spotify', name: 'Spotify', svg: SVGS.spotify, badge: null },
+            
+            { id: 'youtube', name: 'YouTube', svg: SVGS.youtube, badge: null },
+            { id: 'camera', name: 'Cámara', svg: SVGS.camera, badge: null },
+            { id: 'weather', name: 'Tiempo', svg: SVGS.weather, badge: null },
+            { id: 'messages', name: 'Mensajes', svg: SVGS.messages, badge: null },
+            
+            { id: 'twitch', name: 'Twitch', svg: SVGS.twitch, badge: null },
+            { id: 'chatgpt', name: 'ChatGPT', svg: SVGS.chatgpt, badge: null },
+            { id: 'settings', name: 'Ajustes', svg: SVGS.settings, badge: '4' },
+            { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp, badge: '2' },
+            
+            { id: 'appstore', name: 'App Store', svg: SVGS.appstore, badge: null },
+            { id: 'photos', name: 'Fotos', svg: SVGS.photos, badge: null },
+            { id: 'google', name: 'Google', svg: SVGS.google, badge: '7' },
+            { id: 'gmail', name: 'Gmail', svg: SVGS.gmail, badge: null },
+            
+            { id: 'archivos', name: 'Archivos', svg: SVGS.archivos, badge: null },
+            { id: 'contactos', name: 'Contactos', svg: SVGS.contactos, badge: null },
+            { id: 'cartera', name: 'Cartera', svg: SVGS.cartera, badge: null },
+            { id: 'notas', name: 'Notas', svg: SVGS.notas, badge: null }
         ];
-
-        const intruderApp = { id: 'calculator', name: 'Calculadora', svg: SVGS.calculator };
 
         const dockApps = [
-            { id: 'phone', name: 'Teléfono', svg: SVGS.phone },
-            { id: 'safari', name: 'Safari', svg: SVGS.safari },
-            { id: 'messages', name: 'Mensajes', svg: SVGS.messages },
-            { id: 'music', name: 'Música', svg: SVGS.music }
+            { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
+            { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp, badge: '2' },
+            { id: 'instagram', name: 'Instagram', svg: SVGS.instagram, badge: '1' },
+            { id: 'camera', name: 'Cámara', svg: SVGS.camera, badge: null }
         ];
 
-        let thoughtApp = null;
+        const intruderApp = { id: 'safari', name: 'Safari', svg: SVGS.safari, badge: null };
+        let targetApp = null;
         let isTransformed = false;
 
-        function renderApps() {
+        function render() {
             const grid = document.getElementById('appsGrid');
             grid.innerHTML = '';
-            
-            initialApps.forEach((app) => {
-                const el = document.createElement('div');
-                el.className = 'app-item';
-                el.onclick = () => onAppTapped(app, el);
-
-                el.innerHTML = `
-                    <div class="app-icon">${app.svg}</div>
-                    <div class="app-name">${app.name}</div>
+            apps.forEach(app => {
+                grid.innerHTML += `
+                    <div class="app-item" onclick="handleTap('${app.id}', this)">
+                        <div class="app-icon-wrapper">
+                            <div class="app-icon">${app.svg}</div>
+                            ${app.badge ? `<div class="badge">${app.badge}</div>` : ''}
+                        </div>
+                        <div class="app-name">${app.name}</div>
+                    </div>
                 `;
-                grid.appendChild(el);
             });
 
             const dock = document.getElementById('dockGrid');
             dock.innerHTML = '';
-            dockApps.forEach((app) => {
-                const el = document.createElement('div');
-                el.className = 'app-item';
-                el.innerHTML = `<div class="app-icon">${app.svg}</div>`;
-                dock.appendChild(el);
+            dockApps.forEach(app => {
+                dock.innerHTML += `
+                    <div class="app-item">
+                        <div class="app-icon-wrapper">
+                            <div class="app-icon">${app.svg}</div>
+                            ${app.badge ? `<div class="badge">${app.badge}</div>` : ''}
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        function onAppTapped(app, element) {
-            if (thoughtApp) return;
-
-            thoughtApp = app;
+        function handleTap(id, element) {
+            const clickedApp = apps.find(a => a.id === id);
+            if (!targetApp) targetApp = clickedApp;
 
             const iconDiv = element.querySelector('.app-icon');
             const nameDiv = element.querySelector('.app-name');
+            const badgeDiv = element.querySelector('.badge');
 
             iconDiv.classList.add('flip');
-
             setTimeout(() => {
                 iconDiv.innerHTML = intruderApp.svg;
                 if (nameDiv) nameDiv.textContent = intruderApp.name;
+                if (badgeDiv) badgeDiv.remove();
                 iconDiv.classList.remove('flip');
-            }, 180);
+            }, 150);
 
-            if (navigator.vibrate) navigator.vibrate(50);
+            if (navigator.vibrate) navigator.vibrate(40);
         }
 
-        function triggerWaveTransformation() {
-            if (!thoughtApp || isTransformed) return;
+        function runWave() {
+            if (!targetApp || isTransformed) return;
             isTransformed = true;
 
-            const allAppElements = document.querySelectorAll('.apps-grid .app-item, .dock-container .app-item');
-            
-            allAppElements.forEach((el, index) => {
+            const allItems = document.querySelectorAll('.apps-grid .app-item');
+            allItems.forEach((el, index) => {
                 setTimeout(() => {
                     const iconDiv = el.querySelector('.app-icon');
                     const nameDiv = el.querySelector('.app-name');
+                    const badgeDiv = el.querySelector('.badge');
 
-                    iconDiv.innerHTML = thoughtApp.svg;
+                    iconDiv.innerHTML = targetApp.svg;
                     iconDiv.classList.add('flip');
+                    if (nameDiv) nameDiv.textContent = targetApp.name;
+                    if (badgeDiv) badgeDiv.remove();
 
-                    if (nameDiv) {
-                        nameDiv.textContent = thoughtApp.name;
-                    }
-
-                    setTimeout(() => iconDiv.classList.remove('flip'), 250);
-
-                    if (navigator.vibrate) navigator.vibrate(20);
-                }, index * 110);
+                    setTimeout(() => iconDiv.classList.remove('flip'), 200);
+                    if (navigator.vibrate) navigator.vibrate(15);
+                }, index * 90);
             });
         }
 
-        document.getElementById('secret-trigger').addEventListener('click', triggerWaveTransformation);
+        document.getElementById('secret-trigger').addEventListener('click', runWave);
 
-        let touchStartY = 0;
-        window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-
-        window.addEventListener('touchend', (e) => {
-            let touchEndY = e.changedTouches[0].clientY;
-            if (touchEndY - touchStartY > 40) {
-                triggerWaveTransformation();
+        let startY = 0;
+        window.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+        window.addEventListener('touchend', e => {
+            if (e.changedTouches[0].clientY - startY > 50) {
+                runWave();
             }
         });
 
-        renderApps();
+        render();
     </script>
 </body>
 </html>
