@@ -60,10 +60,11 @@
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .app-icon svg {
+        .app-icon img {
             width: 100%;
             height: 100%;
             border-radius: 14px;
+            object-fit: cover;
         }
 
         .app-name {
@@ -133,49 +134,49 @@
     </div>
 
     <script>
-        // Diseños SVG de alta fidelidad iOS
-        const SVGS = {
-            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><g transform="translate(10,10) scale(0.66)"><path fill="#FF3B30" d="M30 15c0-8.28-6.72-15-15-15S0 6.72 0 15c0 3.8 1.41 7.27 3.75 9.92L30 15z"/><path fill="#FF9500" d="M45 30c8.28 0 15-6.72 15-15S53.28 0 45 0c-3.8 0-7.27 1.41-9.92 3.75L45 30z"/><path fill="#FFCC00" d="M30 45c0 8.28 6.72 15 15 15s15-6.72 15-15c0-3.8-1.41-7.27-3.75-9.92L30 45z"/><path fill="#34C759" d="M15 30c-8.28 0-15 6.72-15 15s6.72 15 15 15c3.8 0 7.27-1.41 9.92-3.75L15 30z"/><path fill="#007AFF" d="M30 15c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L30 15z" opacity="0.9"/><path fill="#5856D6" d="M45 30c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L45 30z" opacity="0.9"/></g></svg>`,
-            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#999"/><radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#eeeeee"/><stop offset="100%" stop-color="#999999"/></radialGradient><rect width="60" height="60" rx="14" fill="url(#cg)"/><circle cx="30" cy="32" r="16" fill="#1c1c1e"/><circle cx="30" cy="32" r="12" fill="#0a84ff"/><circle cx="30" cy="32" r="6" fill="#000"/><circle cx="43" cy="20" r="3" fill="#ff453a"/></svg>`,
-            mail: `<svg viewBox="0 0 60 60"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64b5f6"/><stop offset="100%" stop-color="#1e88e5"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#mg)"/><path d="M12 20l18 13 18-13v20H12V20z" fill="#fff" opacity="0.9"/><path d="M12 20l18 13 18-13" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round"/></svg>`,
-            settings: `<svg viewBox="0 0 60 60"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8e8e93"/><stop offset="100%" stop-color="#636366"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#sg)"/><circle cx="30" cy="30" r="14" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="6 3"/><circle cx="30" cy="30" r="8" fill="#fff"/></svg>`,
-            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><rect width="60" height="14" fill="#fbc02d"/><line x1="12" y1="24" x2="48" y2="24" stroke="#e0e0e0" stroke-width="2"/><line x1="12" y1="34" x2="48" y2="34" stroke="#e0e0e0" stroke-width="2"/><line x1="12" y1="44" x2="48" y2="44" stroke="#e0e0e0" stroke-width="2"/></svg>`,
-            weather: `<svg viewBox="0 0 60 60"><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#517fa4"/><stop offset="100%" stop-color="#243949"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#wg)"/><circle cx="24" cy="24" r="10" fill="#ffcc00"/><path d="M22 40a8 8 0 0 1 0-16 10 10 0 0 1 19 3 7 7 0 0 1-3 13z" fill="#fff" opacity="0.9"/></svg>`,
-            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000"/><circle cx="30" cy="30" r="24" fill="none" stroke="#fff" stroke-width="2"/><line x1="30" y1="30" x2="30" y2="14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="30" y1="30" x2="42" y2="30" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="30" y1="30" x2="20" y2="38" stroke="#ff3b30" stroke-width="2"/></svg>`,
-            maps: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#81c784"/><path d="M0 20l20-10 20 10 20-10v40l-20 10-20-10L0 60V20z" fill="#a5d6a7"/><path d="M30 10v40" stroke="#ff5252" stroke-width="4"/><path d="M10 30h40" stroke="#fff" stroke-width="5"/></svg>`,
-            health: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><path d="M30 46S14 34 14 22a8 8 0 0 1 14-5l2 3 2-3a8 8 0 0 1 14 5c0 12-16 24-16 24z" fill="#ff2d55"/></svg>`,
-            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="8" y="16" width="44" height="28" rx="5" fill="#34c759"/><rect x="8" y="22" width="44" height="28" rx="5" fill="#007aff"/><rect x="8" y="28" width="44" height="28" rx="5" fill="#ff9500"/></svg>`,
-            appstore: `<svg viewBox="0 0 60 60"><defs><linearGradient id="asg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#187afe"/><stop offset="100%" stop-color="#0055d4"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#asg)"/><path d="M30 12l4 8h-8zM20 44l10-20 4 8H14zM40 44H20l4-8h20z" fill="#fff"/></svg>`,
-            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="10" y="10" width="40" height="40" rx="8" fill="#ff9500"/><text x="30" y="38" font-size="28" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
+        // Logos e iconos oficiales PNG de iOS (Alta resolución)
+        const ICONS = {
+            photos: 'https://img.icons8.com/color/144/apple-photos.png',
+            camera: 'https://img.icons8.com/color/144/apple-camera.png',
+            mail: 'https://img.icons8.com/color/144/apple-mail.png',
+            settings: 'https://img.icons8.com/color/144/ios-settings.png',
+            notes: 'https://img.icons8.com/color/144/apple-notes.png',
+            weather: 'https://img.icons8.com/color/144/apple-weather.png',
+            clock: 'https://img.icons8.com/color/144/apple-clock.png',
+            maps: 'https://img.icons8.com/color/144/apple-maps.png',
+            health: 'https://img.icons8.com/color/144/apple-health.png',
+            wallet: 'https://img.icons8.com/color/144/apple-wallet.png',
+            appstore: 'https://img.icons8.com/color/144/apple-app-store.png',
+            calculator: 'https://img.icons8.com/color/144/ios-calculator.png',
             
             // DOCK
-            phone: `<svg viewBox="0 0 60 60"><defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#62d773"/><stop offset="100%" stop-color="#28cd41"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#pg)"/><path d="M38 34c-2 0-4-1-5-2l-4 4c-5-3-9-7-12-12l4-4c-1-1-2-3-2-5 0-3 2-6 5-6 1 0 2 1 2 2l2 6c0 1 0 2-1 3l-2 2c3 5 7 9 12 12l2-2c1-1 2-1 3-1l6 2c1 0 2 1 2 2 0 3-3 5-6 5z" fill="#fff"/></svg>`,
-            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><circle cx="30" cy="30" r="24" fill="#007aff"/><polygon points="30,12 35,27 30,30" fill="#ff3b30"/><polygon points="30,48 25,33 30,30" fill="#fff"/><polygon points="30,12 25,27 30,30" fill="#ff3b30" opacity="0.6"/><polygon points="30,48 35,33 30,30" fill="#e5e5ea"/></svg>`,
-            messages: `<svg viewBox="0 0 60 60"><defs><linearGradient id="msg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#62d773"/><stop offset="100%" stop-color="#28cd41"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#msg)"/><path d="M15 18c0-4.4 4.5-8 10-8s10 3.6 10 8-4.5 8-10 8c-1.1 0-2.2-.2-3.2-.5L17 27l.8-3.4C16 22.2 15 20.2 15 18z" fill="#fff" transform="scale(1.2) translate(-4,-2)"/></svg>`,
-            music: `<svg viewBox="0 0 60 60"><defs><linearGradient id="musg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff3b30"/><stop offset="100%" stop-color="#e02114"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#musg)"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#fff"/></svg>`
+            phone: 'https://img.icons8.com/color/144/apple-phone.png',
+            safari: 'https://img.icons8.com/color/144/safari--v1.png',
+            messages: 'https://img.icons8.com/color/144/apple-messages.png',
+            music: 'https://img.icons8.com/color/144/apple-music.png'
         };
 
         const initialApps = [
-            { id: 'photos', name: 'Fotos', svg: SVGS.photos },
-            { id: 'camera', name: 'Cámara', svg: SVGS.camera },
-            { id: 'mail', name: 'Mail', svg: SVGS.mail },
-            { id: 'settings', name: 'Ajustes', svg: SVGS.settings },
-            { id: 'notes', name: 'Notas', svg: SVGS.notes },
-            { id: 'weather', name: 'Tiempo', svg: SVGS.weather },
-            { id: 'clock', name: 'Reloj', svg: SVGS.clock },
-            { id: 'maps', name: 'Mapas', svg: SVGS.maps },
-            { id: 'health', name: 'Salud', svg: SVGS.health },
-            { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
-            { id: 'appstore', name: 'App Store', svg: SVGS.appstore }
+            { id: 'photos', name: 'Fotos', icon: ICONS.photos },
+            { id: 'camera', name: 'Cámara', icon: ICONS.camera },
+            { id: 'mail', name: 'Mail', icon: ICONS.mail },
+            { id: 'settings', name: 'Ajustes', icon: ICONS.settings },
+            { id: 'notes', name: 'Notas', icon: ICONS.notes },
+            { id: 'weather', name: 'Tiempo', icon: ICONS.weather },
+            { id: 'clock', name: 'Reloj', icon: ICONS.clock },
+            { id: 'maps', name: 'Mapas', icon: ICONS.maps },
+            { id: 'health', name: 'Salud', icon: ICONS.health },
+            { id: 'wallet', name: 'Cartera', icon: ICONS.wallet },
+            { id: 'appstore', name: 'App Store', icon: ICONS.appstore }
         ];
 
-        const intruderApp = { id: 'calculator', name: 'Calculadora', svg: SVGS.calculator };
+        const intruderApp = { id: 'calculator', name: 'Calculadora', icon: ICONS.calculator };
 
         const dockApps = [
-            { id: 'phone', name: 'Teléfono', svg: SVGS.phone },
-            { id: 'safari', name: 'Safari', svg: SVGS.safari },
-            { id: 'messages', name: 'Mensajes', svg: SVGS.messages },
-            { id: 'music', name: 'Música', svg: SVGS.music }
+            { id: 'phone', name: 'Teléfono', icon: ICONS.phone },
+            { id: 'safari', name: 'Safari', icon: ICONS.safari },
+            { id: 'messages', name: 'Mensajes', icon: ICONS.messages },
+            { id: 'music', name: 'Música', icon: ICONS.music }
         ];
 
         let thoughtApp = null;
@@ -191,7 +192,7 @@
                 el.onclick = () => onAppTapped(app, el);
 
                 el.innerHTML = `
-                    <div class="app-icon">${app.svg}</div>
+                    <div class="app-icon"><img src="${app.icon}"></div>
                     <div class="app-name">${app.name}</div>
                 `;
                 grid.appendChild(el);
@@ -202,7 +203,7 @@
             dockApps.forEach((app) => {
                 const el = document.createElement('div');
                 el.className = 'app-item';
-                el.innerHTML = `<div class="app-icon">${app.svg}</div>`;
+                el.innerHTML = `<div class="app-icon"><img src="${app.icon}"></div>`;
                 dock.appendChild(el);
             });
         }
@@ -218,7 +219,7 @@
             iconDiv.classList.add('flip');
 
             setTimeout(() => {
-                iconDiv.innerHTML = intruderApp.svg;
+                iconDiv.innerHTML = `<img src="${intruderApp.icon}">`;
                 if (nameDiv) nameDiv.textContent = intruderApp.name;
                 iconDiv.classList.remove('flip');
             }, 150);
@@ -237,7 +238,7 @@
                     const iconDiv = el.querySelector('.app-icon');
                     const nameDiv = el.querySelector('.app-name');
 
-                    iconDiv.innerHTML = thoughtApp.svg;
+                    iconDiv.innerHTML = `<img src="${thoughtApp.icon}">`;
                     iconDiv.classList.add('flip');
 
                     if (nameDiv) {
