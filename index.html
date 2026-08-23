@@ -250,7 +250,7 @@
         let apps = JSON.parse(JSON.stringify(originalAppsData));
         const intruderApp = { id: 'safari', name: 'Safari', svg: SVGS.safari, badge: null };
         let targetApp = null;
-        let isTransformed = false;
+        let canTapApp = true; // Control de bloqueo: solo permite una vez hasta reiniciar
 
         const dockApps = [
             { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
@@ -289,6 +289,9 @@
         }
 
         function handleTap(id, element, index) {
+            if (!canTapApp) return; // Si ya se usó, se bloquea y no hace nada al pulsar otra app
+            canTapApp = false; // Bloquea futuros toques individuales hasta reiniciar
+
             const clickedApp = originalAppsData[index];
             if (!targetApp) targetApp = clickedApp;
 
@@ -310,8 +313,10 @@
         }
 
         function runWave() {
-            if (!targetApp || isTransformed) return;
-            isTransformed = true;
+            if (!targetApp) {
+                targetApp = originalAppsData[0];
+            }
+            canTapApp = false; // Bloquea toques individuales también al activar la ola
 
             const allItems = document.querySelectorAll('.apps-grid .app-item');
             allItems.forEach((el, index) => {
@@ -324,15 +329,19 @@
                     iconDiv.innerHTML = targetApp.svg;
                     iconDiv.classList.add('flip');
                     if (nameDiv) nameDiv.textContent = targetApp.name;
-                    if (badgeDiv) {
-                        badgeDiv.textContent = targetApp.badge;
-                    } else if (targetApp.badge) {
-                        // Si antes no tenía badge pero el objetivo sí, lo recreamos
-                        const wrapper = el.querySelector('.app-icon-wrapper');
-                        const newBadge = document.createElement('div');
-                        newBadge.className = 'badge';
-                        newBadge.textContent = targetApp.badge;
-                        wrapper.appendChild(newBadge);
+                    
+                    if (targetApp.badge) {
+                        if (badgeDiv) {
+                            badgeDiv.textContent = targetApp.badge;
+                        } else {
+                            const wrapper = el.querySelector('.app-icon-wrapper');
+                            const newBadge = document.createElement('div');
+                            newBadge.className = 'badge';
+                            newBadge.textContent = targetApp.badge;
+                            wrapper.appendChild(newBadge);
+                        }
+                    } else if (badgeDiv) {
+                        badgeDiv.remove();
                     }
 
                     setTimeout(() => iconDiv.classList.remove('flip'), 200);
@@ -342,7 +351,7 @@
         }
 
         function revertWave() {
-            if (!isTransformed) return;
+            canTapApp = true; // Restaura la posibilidad de pulsar una app al limpiar / reiniciar
             
             const allItems = document.querySelectorAll('.apps-grid .app-item');
             allItems.forEach((el, index) => {
@@ -369,10 +378,6 @@
                     if (navigator.vibrate) navigator.vibrate(15);
                 }, index * 60);
             });
-
-            setTimeout(() => {
-                isTransformed = false;
-            }, allItems.length * 60 + 200);
         }
 
         // Clic en la esquina inferior derecha para ola
@@ -390,7 +395,7 @@
                 // Deslizar hacia abajo -> Ola de transformación
                 runWave();
             } else if (diffY < -50) {
-                // Deslizar hacia arriba -> Revertir apps al sitio
+                // Deslizar hacia arriba -> Revertir apps al sitio (y desbloquear)
                 revertWave();
             }
         });
