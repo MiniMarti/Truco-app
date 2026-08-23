@@ -28,16 +28,16 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: env(safe-area-inset-top, 47px) 20px env(safe-area-inset-bottom, 10px) 20px;
+            padding: env(safe-area-inset-top, 47px) 18px env(safe-area-inset-bottom, 10px) 18px;
             position: relative;
         }
 
-        /* GRID PRINCIPAL (4 COLUMNAS) */
+        /* GRID COMPLETO (20 APPS - 5 FILAS X 4 COLUMNAS) */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px 18px;
-            margin-top: 15px;
+            gap: 16px 14px;
+            margin-top: 10px;
             z-index: 1;
         }
 
@@ -49,74 +49,72 @@
         }
 
         .app-icon {
-            width: 60px;
-            height: 60px;
+            width: 58px;
+            height: 58px;
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             position: relative;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .app-icon img {
+        .app-icon svg {
             width: 100%;
             height: 100%;
             border-radius: 14px;
-            object-fit: cover;
         }
 
         .app-name {
             color: #ffffff;
             font-size: 11px;
-            margin-top: 5px;
+            margin-top: 4px;
             text-align: center;
             font-weight: 400;
             letter-spacing: -0.2px;
             white-space: nowrap;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
 
-        /* DOCK PEGANTE ABAJO */
+        /* DOCK ABAJO */
         .dock-wrapper {
             width: 100%;
-            margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 5px);
+            margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 2px);
             z-index: 1;
         }
 
         .dock-container {
-            background: rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(30px) saturate(190%);
             -webkit-backdrop-filter: blur(30px) saturate(190%);
             border-radius: 32px;
-            padding: 13px 16px;
+            padding: 11px 14px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            gap: 14px;
+            border: 0.5px solid rgba(255, 255, 255, 0.25);
         }
 
-        /* BARRA HOME */
         .home-indicator {
             width: 135px;
             height: 5px;
             background-color: #ffffff;
             border-radius: 3px;
-            margin: 8px auto 2px auto;
+            margin: 6px auto 2px auto;
         }
 
         .app-icon.flip {
-            transform: scale(1.12) rotate(4deg);
+            transform: scale(1.15) rotate(6deg);
         }
 
-        /* BOTÓN INVISIBLE ESQUINA INFERIOR DERECHA */
+        /* BOTÓN SECRETO */
         #secret-trigger {
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             z-index: 999;
             background: transparent;
         }
@@ -134,49 +132,70 @@
     </div>
 
     <script>
-        // Logos e iconos oficiales PNG de iOS (Alta resolución)
-        const ICONS = {
-            photos: 'https://img.icons8.com/color/144/apple-photos.png',
-            camera: 'https://img.icons8.com/color/144/apple-camera.png',
-            mail: 'https://img.icons8.com/color/144/apple-mail.png',
-            settings: 'https://img.icons8.com/color/144/ios-settings.png',
-            notes: 'https://img.icons8.com/color/144/apple-notes.png',
-            weather: 'https://img.icons8.com/color/144/apple-weather.png',
-            clock: 'https://img.icons8.com/color/144/apple-clock.png',
-            maps: 'https://img.icons8.com/color/144/apple-maps.png',
-            health: 'https://img.icons8.com/color/144/apple-health.png',
-            wallet: 'https://img.icons8.com/color/144/apple-wallet.png',
-            appstore: 'https://img.icons8.com/color/144/apple-app-store.png',
-            calculator: 'https://img.icons8.com/color/144/ios-calculator.png',
+        // BASE DE DATOS DE LOGOS SVG FIABLES
+        const SVGS = {
+            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><g transform="translate(10,10) scale(0.66)"><path fill="#FF3B30" d="M30 15c0-8.28-6.72-15-15-15S0 6.72 0 15c0 3.8 1.41 7.27 3.75 9.92L30 15z"/><path fill="#FF9500" d="M45 30c8.28 0 15-6.72 15-15S53.28 0 45 0c-3.8 0-7.27 1.41-9.92 3.75L45 30z"/><path fill="#FFCC00" d="M30 45c0 8.28 6.72 15 15 15s15-6.72 15-15c0-3.8-1.41-7.27-3.75-9.92L30 45z"/><path fill="#34C759" d="M15 30c-8.28 0-15 6.72-15 15s6.72 15 15 15c3.8 0 7.27-1.41 9.92-3.75L15 30z"/><path fill="#007AFF" d="M30 15c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L30 15z" opacity="0.9"/><path fill="#5856D6" d="M45 30c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L45 30z" opacity="0.9"/></g></svg>`,
+            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#8e8e93"/><circle cx="30" cy="32" r="16" fill="#1c1c1e"/><circle cx="30" cy="32" r="11" fill="#0a84ff"/><circle cx="30" cy="32" r="5" fill="#000"/><circle cx="43" cy="20" r="3" fill="#ff453a"/></svg>`,
+            mail: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1e88e5"/><path d="M12 20l18 13 18-13v20H12V20z" fill="#fff"/><path d="M12 20l18 13 18-13" stroke="#fff" stroke-width="3" fill="none"/></svg>`,
+            settings: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#636366"/><circle cx="30" cy="30" r="14" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="6 3"/><circle cx="30" cy="30" r="8" fill="#fff"/></svg>`,
+            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><rect width="60" height="14" fill="#fbc02d"/><line x1="12" y1="24" x2="48" y2="24" stroke="#e0e0e0" stroke-width="2"/><line x1="12" y1="34" x2="48" y2="34" stroke="#e0e0e0" stroke-width="2"/><line x1="12" y1="44" x2="48" y2="44" stroke="#e0e0e0" stroke-width="2"/></svg>`,
+            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#29b6f6"/><circle cx="24" cy="24" r="10" fill="#ffcc00"/><path d="M22 40a8 8 0 0 1 0-16 10 10 0 0 1 19 3 7 7 0 0 1-3 13z" fill="#fff" opacity="0.9"/></svg>`,
+            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000"/><circle cx="30" cy="30" r="24" fill="none" stroke="#fff" stroke-width="2"/><line x1="30" y1="30" x2="30" y2="14" stroke="#fff" stroke-width="3"/><line x1="30" y1="30" x2="42" y2="30" stroke="#fff" stroke-width="3"/><line x1="30" y1="30" x2="20" y2="38" stroke="#ff3b30" stroke-width="2"/></svg>`,
+            maps: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#81c784"/><path d="M30 10v40" stroke="#ff5252" stroke-width="4"/><path d="M10 30h40" stroke="#fff" stroke-width="5"/></svg>`,
+            health: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><path d="M30 46S14 34 14 22a8 8 0 0 1 14-5l2 3 2-3a8 8 0 0 1 14 5c0 12-16 24-16 24z" fill="#ff2d55"/></svg>`,
+            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="8" y="16" width="44" height="28" rx="5" fill="#34c759"/><rect x="8" y="22" width="44" height="28" rx="5" fill="#007aff"/><rect x="8" y="28" width="44" height="28" rx="5" fill="#ff9500"/></svg>`,
+            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#007aff"/><path d="M30 12l4 8h-8zM20 44l10-20 4 8H14zM40 44H20l4-8h20z" fill="#fff"/></svg>`,
+            fitness: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000"/><circle cx="30" cy="30" r="18" stroke="#a4ff00" stroke-width="5" fill="none"/><circle cx="30" cy="30" r="12" stroke="#00f0ff" stroke-width="5" fill="none"/><circle cx="30" cy="30" r="6" stroke="#ff0055" stroke-width="5" fill="none"/></svg>`,
+            reminders: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><circle cx="16" cy="20" r="4" fill="#ff3b30"/><circle cx="16" cy="30" r="4" fill="#007aff"/><circle cx="16" cy="40" r="4" fill="#ff9500"/><line x1="26" y1="20" x2="48" y2="20" stroke="#8e8e93" stroke-width="3"/><line x1="26" y1="30" x2="48" y2="30" stroke="#8e8e93" stroke-width="3"/><line x1="26" y1="40" x2="48" y2="40" stroke="#8e8e93" stroke-width="3"/></svg>`,
+            books: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff9500"/><path d="M16 22c4 0 8 2 14 6 6-4 10-6 14-6v22c-4 0-8 2-14 6-6-4-10-6-14-6V22z" fill="#fff"/></svg>`,
+            podcasts: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#8e24aa"/><circle cx="30" cy="26" r="6" fill="#fff"/><path d="M20 44c0-6 4-10 10-10s10 4 10 10" stroke="#fff" stroke-width="4" fill="none"/></svg>`,
+            tv: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000"/><rect x="12" y="20" width="36" height="24" rx="4" fill="#fff" opacity="0.2"/><text x="30" y="36" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold">tv</text></svg>`,
+            contacts: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#a2885c"/><circle cx="30" cy="24" r="8" fill="#fff"/><path d="M16 44c0-7 6-11 14-11s14 4 14 11" fill="#fff"/></svg>`,
+            files: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><path d="M12 20c0-2 2-4 4-4h10l4 4h14c2 0 4 2 4 4v18c0 2-2 4-4 4H16c-2 0-4-2-4-4V20z" fill="#007aff"/></svg>`,
+            shortcuts: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><path d="M22 20l16 10-16 10z" fill="#ff2d55"/><path d="M38 20L22 30l16 10z" fill="#5856d6" opacity="0.7"/></svg>`,
+            translate: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#007aff"/><text x="22" y="36" font-size="18" fill="#fff" font-weight="bold">A</text><text x="38" y="36" font-size="18" fill="#fff" font-weight="bold">文</text></svg>`,
+
+            // APP INTRUSA
+            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff9500"/><text x="30" y="42" font-size="36" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
             
             // DOCK
-            phone: 'https://img.icons8.com/color/144/apple-phone.png',
-            safari: 'https://img.icons8.com/color/144/safari--v1.png',
-            messages: 'https://img.icons8.com/color/144/apple-messages.png',
-            music: 'https://img.icons8.com/color/144/apple-music.png'
+            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><path d="M38 34c-2 0-4-1-5-2l-4 4c-5-3-9-7-12-12l4-4c-1-1-2-3-2-5 0-3 2-6 5-6 1 0 2 1 2 2l2 6c0 1 0 2-1 3l-2 2c3 5 7 9 12 12l2-2c1-1 2-1 3-1l6 2c1 0 2 1 2 2 0 3-3 5-6 5z" fill="#fff"/></svg>`,
+            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><circle cx="30" cy="30" r="24" fill="#007aff"/><polygon points="30,12 35,27 30,30" fill="#ff3b30"/><polygon points="30,48 25,33 30,30" fill="#fff"/></svg>`,
+            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><path d="M18 20c0-4 4-7 12-7s12 3 12 7-4 7-12 7c-1 0-3 0-4 1l-4 2 1-3c-2-1-3-3-3-4z" fill="#fff" transform="scale(1.2) translate(-3,-2)"/></svg>`,
+            music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff2d55"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#fff"/></svg>`
         };
 
+        // 20 APPS PARA LLENAR LA PANTALLA COMPLETA
         const initialApps = [
-            { id: 'photos', name: 'Fotos', icon: ICONS.photos },
-            { id: 'camera', name: 'Cámara', icon: ICONS.camera },
-            { id: 'mail', name: 'Mail', icon: ICONS.mail },
-            { id: 'settings', name: 'Ajustes', icon: ICONS.settings },
-            { id: 'notes', name: 'Notas', icon: ICONS.notes },
-            { id: 'weather', name: 'Tiempo', icon: ICONS.weather },
-            { id: 'clock', name: 'Reloj', icon: ICONS.clock },
-            { id: 'maps', name: 'Mapas', icon: ICONS.maps },
-            { id: 'health', name: 'Salud', icon: ICONS.health },
-            { id: 'wallet', name: 'Cartera', icon: ICONS.wallet },
-            { id: 'appstore', name: 'App Store', icon: ICONS.appstore }
+            { id: 'photos', name: 'Fotos', svg: SVGS.photos },
+            { id: 'camera', name: 'Cámara', svg: SVGS.camera },
+            { id: 'mail', name: 'Mail', svg: SVGS.mail },
+            { id: 'settings', name: 'Ajustes', svg: SVGS.settings },
+            { id: 'notes', name: 'Notas', svg: SVGS.notes },
+            { id: 'weather', name: 'Tiempo', svg: SVGS.weather },
+            { id: 'clock', name: 'Reloj', svg: SVGS.clock },
+            { id: 'maps', name: 'Mapas', svg: SVGS.maps },
+            { id: 'health', name: 'Salud', svg: SVGS.health },
+            { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
+            { id: 'appstore', name: 'App Store', svg: SVGS.appstore },
+            { id: 'fitness', name: 'Fitness', svg: SVGS.fitness },
+            { id: 'reminders', name: 'Recordatorios', svg: SVGS.reminders },
+            { id: 'books', name: 'Libros', svg: SVGS.books },
+            { id: 'podcasts', name: 'Podcasts', svg: SVGS.podcasts },
+            { id: 'tv', name: 'Apple TV', svg: SVGS.tv },
+            { id: 'contacts', name: 'Contactos', svg: SVGS.contacts },
+            { id: 'files', name: 'Archivos', svg: SVGS.files },
+            { id: 'shortcuts', name: 'Atajos', svg: SVGS.shortcuts },
+            { id: 'translate', name: 'Traducir', svg: SVGS.translate }
         ];
 
-        const intruderApp = { id: 'calculator', name: 'Calculadora', icon: ICONS.calculator };
+        const intruderApp = { id: 'calculator', name: 'Calculadora', svg: SVGS.calculator };
 
         const dockApps = [
-            { id: 'phone', name: 'Teléfono', icon: ICONS.phone },
-            { id: 'safari', name: 'Safari', icon: ICONS.safari },
-            { id: 'messages', name: 'Mensajes', icon: ICONS.messages },
-            { id: 'music', name: 'Música', icon: ICONS.music }
+            { id: 'phone', name: 'Teléfono', svg: SVGS.phone },
+            { id: 'safari', name: 'Safari', svg: SVGS.safari },
+            { id: 'messages', name: 'Mensajes', svg: SVGS.messages },
+            { id: 'music', name: 'Música', svg: SVGS.music }
         ];
 
         let thoughtApp = null;
@@ -192,7 +211,7 @@
                 el.onclick = () => onAppTapped(app, el);
 
                 el.innerHTML = `
-                    <div class="app-icon"><img src="${app.icon}"></div>
+                    <div class="app-icon">${app.svg}</div>
                     <div class="app-name">${app.name}</div>
                 `;
                 grid.appendChild(el);
@@ -203,7 +222,7 @@
             dockApps.forEach((app) => {
                 const el = document.createElement('div');
                 el.className = 'app-item';
-                el.innerHTML = `<div class="app-icon"><img src="${app.icon}"></div>`;
+                el.innerHTML = `<div class="app-icon">${app.svg}</div>`;
                 dock.appendChild(el);
             });
         }
@@ -219,10 +238,10 @@
             iconDiv.classList.add('flip');
 
             setTimeout(() => {
-                iconDiv.innerHTML = `<img src="${intruderApp.icon}">`;
+                iconDiv.innerHTML = intruderApp.svg;
                 if (nameDiv) nameDiv.textContent = intruderApp.name;
                 iconDiv.classList.remove('flip');
-            }, 150);
+            }, 180);
 
             if (navigator.vibrate) navigator.vibrate(50);
         }
@@ -234,21 +253,22 @@
             const allAppElements = document.querySelectorAll('.apps-grid .app-item, .dock-container .app-item');
             
             allAppElements.forEach((el, index) => {
+                // 110ms de intervalo entre cada app para una ola visiblemente más pausada
                 setTimeout(() => {
                     const iconDiv = el.querySelector('.app-icon');
                     const nameDiv = el.querySelector('.app-name');
 
-                    iconDiv.innerHTML = `<img src="${thoughtApp.icon}">`;
+                    iconDiv.innerHTML = thoughtApp.svg;
                     iconDiv.classList.add('flip');
 
                     if (nameDiv) {
                         nameDiv.textContent = thoughtApp.name;
                     }
 
-                    setTimeout(() => iconDiv.classList.remove('flip'), 200);
+                    setTimeout(() => iconDiv.classList.remove('flip'), 250);
 
                     if (navigator.vibrate) navigator.vibrate(20);
-                }, index * 60);
+                }, index * 110);
             });
         }
 
@@ -261,7 +281,7 @@
 
         window.addEventListener('touchend', (e) => {
             let touchEndY = e.changedTouches[0].clientY;
-            if (touchEndY - touchStartY > 50) {
+            if (touchEndY - touchStartY > 40) {
                 triggerWaveTransformation();
             }
         });
