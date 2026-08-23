@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>iOS Magic Switch</title>
+    <title>Magic Switch</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -28,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
+            background-size: contain;
             background-repeat: no-repeat;
             background-position: center top;
             z-index: 1;
@@ -43,10 +43,10 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            gap: 15px 12px;
-            padding-top: calc(env(safe-area-inset-top, 40px) + 25px);
-            padding-left: 22px;
-            padding-right: 22px;
+            gap: 12px 10px;
+            padding-top: calc(env(safe-area-inset-top, 40px) + 15px);
+            padding-left: 18px;
+            padding-right: 18px;
             padding-bottom: 25%;
             z-index: 2;
         }
@@ -57,20 +57,19 @@
             cursor: pointer;
             position: relative;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
 
         .calc-icon {
             width: 62px;
             height: 62px;
-            border-radius: 15px;
+            border-radius: 14px;
             background-color: #1c1c1e;
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
         }
 
         .calc-icon svg {
@@ -80,11 +79,11 @@
 
         .show-calc .calc-icon {
             display: flex;
-            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
+            0% { transform: scale(0.4); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
@@ -107,10 +106,10 @@
     <div id="secret-trigger"></div>
 
     <script>
-        // Imagen de fondo en Base64
-        const bgBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Reemplazar por tu imagen directa o cargar via URL
+        // Imagen del usuario en formato Data URL
+        const bgDataUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
-        document.getElementById('bgContainer').style.backgroundImage = `url('${bgBase64}')`;
+        document.getElementById('bgContainer').style.backgroundImage = `url('${bgDataUrl}')`;
 
         const calcSVG = `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><circle cx="30" cy="30" r="18" fill="#ff9f0a"/><text x="30" y="41" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`;
 
@@ -149,7 +148,7 @@
                 setTimeout(() => {
                     zone.classList.add('show-calc');
                     if (navigator.vibrate) navigator.vibrate(20);
-                }, index * 80);
+                }, index * 75);
             });
         }
 
