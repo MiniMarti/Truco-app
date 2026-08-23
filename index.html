@@ -199,22 +199,8 @@
 
             twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></g></svg>`,
 
-            // Nuevo diseño de Teléfono basado en tu referencia (fondo oscuro y teléfono verde sólido con relieve)
-            chatgpt: `<svg viewBox="0 0 60 60">
-                <defs>
-                    <linearGradient id="phoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#34C759"/>
-                        <stop offset="100%" stop-color="#248A3D"/>
-                    </linearGradient>
-                    <filter id="phoneShadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000000" flood-opacity="0.6"/>
-                    </filter>
-                </defs>
-                <rect width="60" height="60" rx="14" fill="#141414"/>
-                <g filter="url(#phoneShadow)" transform="translate(30,30) scale(1.15) translate(-30,-30)">
-                    <path d="M38.2,34.5c-2.3-2.3-5.2-3.5-7.5-3.5s-2.7.5-3.8,1.5l-1.6,1.6c-.7.7-1.7,1-2.7.6-1.9-.8-4.4-2.5-6.6-4.7s-3.9-4.7-4.7-6.6c-.4-1-.1-2 .6-2.7l1.6-1.6c1.1-1.1,1.5-2.5,1.5-3.8s-1.2-5.2-3.5-7.5c-2-2-5-2-7,0L10.2,10.2c-2.2,2.2-3,5.4-2,8.4 1,3.1 3.2,6.9 6.5,10.2s7.1,5.5,10.2,6.5c3,1,6.3.2,8.4-2l2.3-2.3c2-2 2-5,0-7z" fill="url(#phoneGrad)" transform="translate(0, 0) scale(0.9) translate(3, 3)"/>
-                </g>
-            </svg>`,
+            // Icono de Teléfono idéntico al del dock de la izquierda
+            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(13, 13) scale(1.25)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158"/></g></svg>`,
 
             settings: `<svg viewBox="0 0 60 60"><defs><linearGradient id="settBg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3A3A3C"/><stop offset="100%" stop-color="#1C1C1E"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#settBg)"/><g transform="translate(30, 30)"><circle cx="0" cy="0" r="18" fill="none" stroke="#d1d1d6" stroke-width="3" stroke-dasharray="2.5, 2.2"/><circle cx="0" cy="0" r="13" fill="#3A3A3C"/><circle cx="0" cy="0" r="13" fill="none" stroke="#d1d1d6" stroke-width="1.2"/><g stroke="#d1d1d6" stroke-width="2.8" stroke-linecap="round"><line x1="0" y1="0" x2="0" y2="-12"/><line x1="0" y1="0" x2="10.4" y2="6"/><line x1="0" y1="0" x2="-10.4" y2="6"/></g><circle cx="0" cy="0" r="3" fill="#1C1C1E" stroke="#d1d1d6" stroke-width="1.5"/></g></svg>`,
 
@@ -236,8 +222,6 @@
 
             notas: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" rx="2" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#555" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#555" stroke-width="2"/></g></svg>`,
 
-            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(13, 13) scale(1.25)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158"/></g></svg>`,
-
             safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="23" fill="none" stroke="#0a84ff" stroke-width="3"/><polygon points="30,9 37,28 30,30" fill="#ff453a"/><polygon points="30,51 23,32 30,30" fill="#fff"/></svg>`
         };
 
@@ -253,7 +237,7 @@
             { id: 'messages', name: 'Mensajes', svg: SVGS.messages, badge: null },
             
             { id: 'twitch', name: 'Twitch', svg: SVGS.twitch, badge: null },
-            { id: 'chatgpt', name: 'Teléfono', svg: SVGS.chatgpt, badge: null },
+            { id: 'phone', name: 'Teléfono', svg: SVGS.phone, badge: null },
             { id: 'settings', name: 'Ajustes', svg: SVGS.settings, badge: '4' },
             { id: 'whatsapp', name: 'WhatsApp', svg: SVGS.whatsapp, badge: '2' },
             
