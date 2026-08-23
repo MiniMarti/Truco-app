@@ -199,31 +199,21 @@
 
             twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="scale(1.1) translate(-2.5,-2.5)"><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></g></svg>`,
 
-            // Logo exacto de ChatGPT basado en la referencia (estilo metálico/brillante)
+            // Logo oficial de ChatGPT con trazo plateado brillante y estilo idéntico a tu imagen
             chatgpt: `<svg viewBox="0 0 60 60">
                 <defs>
                     <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="50%" stop-color="#c5c5c7"/>
-                        <stop offset="100%" stop-color="#7a7a7c"/>
+                        <stop offset="40%" stop-color="#d1d1d6"/>
+                        <stop offset="100%" stop-color="#636366"/>
                     </linearGradient>
                     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000000" flood-opacity="0.6"/>
+                        <feDropShadow dx="0" dy="1" stdDeviation="0.8" flood-color="#000000" flood-opacity="0.7"/>
                     </filter>
                 </defs>
                 <rect width="60" height="60" rx="14" fill="#141414"/>
-                <g filter="url(#shadow)">
-                    <!-- Contorno principal tipo flor/engranaje característico de OpenAI -->
-                    <path d="M37.5,19.2c-1.3-.8-2.9-.9-4.3-.3-.4.2-.9.5-1.3.8-.5-.3-1-.6-1.5-.8-1.4-.6-3-.5-4.3.3-2.1,1.2-2.9,3.8-1.9,5.9-.2.5-.4,1-.5,1.5-.8,1.4-.8,3.1,0,4.5.3.6.7,1.1,1.2,1.6-.2.5-.3,1-.4,1.5-.5,2.1.6,4.3,2.6,5.1,1.3.5,2.8.4,4-.2.4-.2.8-.5,1.2-.8.4.3.8.6,1.2.8,1.2.6,2.7.7,4,.2,2-.8,3.1-3,2.6-5.1-.1-.5-.2-1-.4-1.5.5-.5.9-1,1.2-1.6.8-1.4.8-3.1,0-4.5-.1-.5-.3-1-.5-1.5,1-2.1.2-4.7-1.9-5.9z" fill="none" stroke="url(#metal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- Hexágono central -->
-                    <polygon points="30,24 34.5,26.5 34.5,31.5 30,34 25.5,31.5 25.5,26.5" fill="#141414" stroke="url(#metal)" stroke-width="2.5" stroke-linejoin="round"/>
-                    <!-- Líneas internas de conexión -->
-                    <line x1="30" y1="24" x2="30" y2="19.5" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="34.5" y1="26.5" x2="38.5" y2="24" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="34.5" y1="31.5" x2="38.5" y2="34" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="30" y1="34" x2="30" y2="38.5" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="25.5" y1="31.5" x2="21.5" y2="34" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="25.5" y1="26.5" x2="21.5" y2="24" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round"/>
+                <g filter="url(#shadow)" transform="translate(30,30) scale(0.92) translate(-30,-30)">
+                    <path d="M33.8,15.6c-1.1-.3-2.2.1-2.8,1.1-.6,1-.3,2.2.6,2.8,1.2.7,2,2,2,3.4 0,1.4-.8,2.7-2,3.4-.9.6-1.2,1.8-.6,2.8.6,1,1.8,1.4,2.8.6 2.3-1.4,3.7-3.9,3.7-6.8 0-2.9-1.4-5.4-3.7-6.8zm-7.6,0c-2.3,1.4-3.7,3.9-3.7,6.8 0,2.9 1.4,5.4 3.7,6.8 1,.8,2.2.4,2.8-.6.6-1 .3-2.2-.6-2.8-1.2-.7-2-2-2-3.4 0-1.4.8-2.7,2-3.4.9-.6,1.2-1.8.6-2.8-.6-1-1.8-1.4-2.8-.6zm11.4,12.7c-1.2-.7-2.7-.7-3.9,0-.9.6-1.2,1.8-.6,2.8.6,1,1.8,1.4,2.8.6 0,0 0,0 0,0 .7-.4 1.5-.4 2.2,0 1,.6 1.4,1.8.8,2.8-.6,1-1.8,1.4-2.8.8-2.3-1.3-5.2-1.3-7.5,0-1,.6-1.4,1.8-.8,2.8.6,1,1.8,1.4,2.8.8.7-.4 1.5-.4 2.2,0 1.2.7 2.7.7 3.9,0 1.1-.6,1.6-1.9,1.3-3.1-.3-1.2-1.3-2.1-2.5-2.3zm-15.2,0c-1.2.2-2.2,1.1-2.5,2.3-.3,1.2.2,2.5,1.3,3.1 1.2.7 2.7.7 3.9,0 .7-.4 1.5-.4 2.2,0 1,.6 2.2.2 2.8-.8.6-1 .2-2.2-.8-2.8-2.3-1.3-5.2-1.3-7.5,0 0,0 0,0 0,0zm3.8,9c-1.2.7-2,2-2,3.4 0,1.4.8,2.7,2,3.4.9.6,1.2,1.8.6,2.8-.6,1-1.8,1.4-2.8.6-2.3-1.4-3.7-3.9-3.7-6.8 0-2.9 1.4-5.4 3.7-6.8 1-.8,2.2-.4,2.8.6.6,1 .3,2.2-.6,2.8zm7.6,0c-.9-.6-1.2-1.8-.6-2.8.6-1,1.8-1.4,2.8-.6 2.3,1.4 3.7,3.9 3.7,6.8 0,2.9-1.4,5.4-3.7,6.8-1 .8-2.2.4-2.8-.6-.6-1-.3-2.2.6-2.8 1.2-.7,2-2,2-3.4 0-1.4-.8-2.7-2-3.4z" fill="#141414" stroke="url(#metal)" stroke-width="2.5" stroke-linejoin="round"/>
                 </g>
             </svg>`,
 
