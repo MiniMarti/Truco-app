@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* GRID COMPLETO (20 APPS - 5 FILAS X 4 COLUMNAS) */
+        /* GRID COMPLETO (20 APPS) */
         .apps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -58,12 +58,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             position: relative;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
         }
 
         .app-icon svg {
             width: 100%;
             height: 100%;
             border-radius: 14px;
+            display: block;
         }
 
         .app-name {
@@ -132,7 +134,7 @@
     </div>
 
     <script>
-        // LOGOS SVG VECTORIALES EXACTOS DE APPS POPULARES
+        // LOGOS SVG VECTORIALES EXACTOS Y CENTRADOS
         const SVGS = {
             instagram: `<svg viewBox="0 0 60 60"><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#ig)"/><rect x="15" y="15" width="30" height="30" rx="9" fill="none" stroke="#fff" stroke-width="3"/><circle cx="30" cy="30" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="38" cy="22" r="2" fill="#fff"/></svg>`,
             youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#FF0000"/><polygon points="24,18 42,30 24,42" fill="#FFFFFF"/></svg>`,
@@ -150,19 +152,29 @@
             maps: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#81c784"/><path d="M30 10v40" stroke="#ff5252" stroke-width="4"/><path d="M10 30h40" stroke="#fff" stroke-width="5"/></svg>`,
             wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="8" y="16" width="44" height="28" rx="5" fill="#34c759"/><rect x="8" y="22" width="44" height="28" rx="5" fill="#007aff"/><rect x="8" y="28" width="44" height="28" rx="5" fill="#ff9500"/></svg>`,
             appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#007aff"/><path d="M30 14l4 8h-8zM20 42l10-20 4 8H14zM40 42H20l4-8h20z" fill="#fff"/></svg>`,
-            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff9500"/><text x="30" y="42" font-size="36" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
             pinterest: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#E60023"/><path d="M30 12c-9.9 0-18 8.1-18 18 0 7.6 4.7 14.1 11.4 16.7-.2-1.4-.3-3.6.1-5.1l2.5-10.7s-.6-1.3-.6-3.2c0-3 1.7-5.3 3.9-5.3 1.8 0 2.7 1.4 2.7 3 0 1.8-1.2 4.6-1.8 7.1-.5 2.1 1.1 3.8 3.2 3.8 3.8 0 6.8-4 6.8-9.8 0-5.1-3.7-8.7-8.9-8.7-6.1 0-9.6 4.6-9.6 9.3 0 1.8.7 3.8 1.6 4.9.2.2.2.4.1.7l-.6 2.4c-.1.4-.3.5-.7.3-2.6-1.2-4.2-5-4.2-8.1 0-6.6 4.8-12.7 13.8-12.7 7.3 0 12.9 5.2 12.9 12.1 0 7.2-4.5 13-10.8 13-2.1 0-4.1-1.1-4.8-2.4l-1.3 5c-.5 1.8-1.8 4.1-2.7 5.5 1.7.5 3.5.8 5.4.8 9.9 0 18-8.1 18-18S39.9 12 30 12z" fill="#fff"/></svg>`,
-            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#5865F2"/><path d="M40 18s-3-1.4-6.2-1.7c-.3.5-.6 1.2-.8 1.7-3.4-.5-6.8-.5-10.1 0-.2-.5-.5-1.2-.8-1.7-3.3.3-6.2 1.7-6.2 1.7S11 25.4 11 34.2c2.2 1.6 4.4 2.7 6.6 3.4.5-.7 1-1.5 1.4-2.3-1.2-.4-2.3-1-3.3-1.7.3-.2.5-.4.8-.6 6.3 2.9 13.1 2.9 19.3 0 .3.2.5.4.8.6-1 .7-2.1 1.3-3.3 1.7.4.8.9 1.6 1.4 2.3 2.2-.7 4.4-1.8 6.6-3.4 0-8.8-4.9-16.2-4.9-16.2zM23.5 30.7c-1.3 0-2.4-1.2-2.4-2.7 0-1.5 1-2.7 2.4-2.7 1.3 0 2.4 1.2 2.4 2.7 0 1.5-1 2.7-2.4 2.7zm13 0c-1.3 0-2.4-1.2-2.4-2.7 0-1.5 1-2.7 2.4-2.7 1.3 0 2.4 1.2 2.4 2.7 0 1.5-1.1 2.7-2.4 2.7z" fill="#fff"/></svg>`,
             whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#25D366"/><path d="M30 14c-8.8 0-16 7.2-16 16 0 2.8.7 5.5 2.1 7.9L14 46l8.3-2.2c2.3 1.3 5 2 7.7 2 8.8 0 16-7.2 16-16s-7.2-16-16-16zm9.3 22.6c-.4 1.1-2.3 2.1-3.2 2.2-.9.1-2.1.2-3.4-.2-2.1-.7-4.8-2.1-7.2-4.5-3-3-4.5-5.9-5-7.3-.5-1.4 0-2.8.5-3.3.4-.5.9-.6 1.2-.6h.9c.3 0 .7 0 1 .7l1.4 3.4c.1.3.1.6 0 .9l-.5.9c-.2.2-.3.4-.1.8.5.9 1.5 2.2 2.9 3.4 1.8 1.6 3.3 2.1 4.2 2.5.4.2.6.1.8-.1l1.1-1.3c.3-.4.7-.5 1-.3l3.2 1.5c.4.2.6.4.6.8 0 .4-.2 1.5-.7 2z" fill="#fff"/></svg>`,
+            brawlstars: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#FFC700"/><path d="M30 12l5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z" fill="#000"/><path d="M30 15l4 8 9 1.5-6.5 6.5 1.5 9-8-4-8 4 1.5-9L17 24.5l9-1.5z" fill="#FF0044"/></svg>`,
 
-            // DOCK
-            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><path d="M38 34c-2 0-4-1-5-2l-4 4c-5-3-9-7-12-12l4-4c-1-1-2-3-2-5 0-3 2-6 5-6 1 0 2 1 2 2l2 6c0 1 0 2-1 3l-2 2c3 5 7 9 12 12l2-2c1-1 2-1 3-1l6 2c1 0 2 1 2 2 0 3-3 5-6 5z" fill="#fff"/></svg>`,
-            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><circle cx="30" cy="30" r="24" fill="#007aff"/><polygon points="30,12 35,27 30,30" fill="#ff3b30"/><polygon points="30,48 25,33 30,30" fill="#fff"/></svg>`,
-            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><path d="M18 20c0-4 4-7 12-7s12 3 12 7-4 7-12 7c-1 0-3 0-4 1l-4 2 1-3c-2-1-3-3-3-4z" fill="#fff" transform="scale(1.2) translate(-3,-2)"/></svg>`,
+            // SVG CORREGIDO: DISCORD CENTRADO
+            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#5865F2"/><g transform="translate(11, 14)"><path d="M31.2 3.2s-2.8-1.3-5.8-1.6c-.3.5-.6 1.1-.8 1.6-3.2-.5-6.4-.5-9.6 0-.2-.5-.5-1.1-.8-1.6-3 .3-5.8 1.6-5.8 1.6S3 10.3 3 18.6c2.1 1.5 4.1 2.5 6.2 3.2.5-.7.9-1.4 1.3-2.1-1.1-.4-2.2-.9-3.1-1.6.3-.2.5-.4.7-.6 5.9 2.7 12.3 2.7 18.1 0 .2.2.5.4.7.6-.9.7-2 1.2-3.1 1.6.4.7.8 1.4 1.3 2.1 2.1-.7 4.1-1.7 6.2-3.2 0-8.3-4.6-15.4-4.6-15.4zM12.7 15.3c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-.9 2.5-2.2 2.5zm12.6 0c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-1 2.5-2.2 2.5z" fill="#fff"/></g></svg>`,
+
+            // APP INTRUSA OCULTA PARA EL TRUCO
+            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff9500"/><text x="30" y="42" font-size="36" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
+
+            // SVG CORREGIDO: TELÉFONO CENTRADO
+            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><g transform="translate(15, 15)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#fff" transform="scale(1.1)"/></g></svg>`,
+
+            // SVG CORREGIDO: SAFARI CENTRADO
+            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#fff"/><circle cx="30" cy="30" r="22" fill="#007aff"/><polygon points="30,12 36,28 30,30" fill="#ff3b30"/><polygon points="30,48 24,32 30,30" fill="#fff"/></svg>`,
+
+            // SVG CORREGIDO: MENSAJES CENTRADO
+            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#34c759"/><path d="M30 14c-8.3 0-15 5.8-15 13 0 4.2 2.3 8 5.9 10.4l-1.5 5.6 5.9-3.1c1.5.4 3.1.7 4.7.7 8.3 0 15-5.8 15-13s-6.7-13-15-13z" fill="#fff"/></svg>`,
+
             music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#ff2d55"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#fff"/></svg>`
         };
 
-        // 20 APPS COTIDIANAS Y RECONOCIBLES
+        // REJILLA PRINCIPAL DE 20 APPS (SIN CALCULADORA)
         const initialApps = [
             { id: 'instagram', name: 'Instagram', svg: SVGS.instagram },
             { id: 'youtube', name: 'YouTube', svg: SVGS.youtube },
@@ -183,7 +195,7 @@
             { id: 'discord', name: 'Discord', svg: SVGS.discord },
             { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
             { id: 'appstore', name: 'App Store', svg: SVGS.appstore },
-            { id: 'calculator', name: 'Calculadora', svg: SVGS.calculator }
+            { id: 'brawlstars', name: 'Brawl Stars', svg: SVGS.brawlstars }
         ];
 
         // APP INTRUSA QUE REEMPLAZA A LA ELEGIDA
@@ -251,7 +263,6 @@
             const allAppElements = document.querySelectorAll('.apps-grid .app-item, .dock-container .app-item');
             
             allAppElements.forEach((el, index) => {
-                // Intervalo de 110ms para una ola fluida y pausada
                 setTimeout(() => {
                     const iconDiv = el.querySelector('.app-icon');
                     const nameDiv = el.querySelector('.app-name');
