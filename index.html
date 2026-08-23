@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>iOS 26 Dark Mode</title>
+    <title>iOS 18 Dark Icons Fixed</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -57,10 +57,7 @@
             position: relative;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.75), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.25),
-                        inset 0 -1px 2px rgba(0, 0, 0, 0.8);
-            border: 0.5px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
         .app-icon svg {
@@ -70,14 +67,13 @@
         }
 
         .app-name {
-            color: #EBEBF5;
+            color: #FFFFFF;
             font-size: 11px;
             margin-top: 5px;
             text-align: center;
-            font-weight: 400;
+            font-weight: 500;
             letter-spacing: -0.2px;
             white-space: nowrap;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
         }
 
         .dock-wrapper {
@@ -87,16 +83,15 @@
         }
 
         .dock-container {
-            background: rgba(20, 20, 22, 0.65);
-            backdrop-filter: blur(35px) saturate(210%);
-            -webkit-backdrop-filter: blur(35px) saturate(210%);
+            background: rgba(30, 30, 32, 0.75);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border-radius: 35px;
             padding: 12px 14px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 14px;
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
         }
 
         .home-indicator {
@@ -135,36 +130,58 @@
     </div>
 
     <script>
-        const DARK_BG = "#1c1c1e";
+        const BG = "#1c1c1e";
 
         const SVGS = {
-            instagram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><defs><linearGradient id="ig-dark" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#dc2743"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="15" y="15" width="30" height="30" rx="9" fill="none" stroke="url(#ig-dark)" stroke-width="3.5"/><circle cx="30" cy="30" r="7" fill="none" stroke="url(#ig-dark)" stroke-width="3.5"/><circle cx="38" cy="22" r="2.2" fill="#dc2743"/></svg>`,
-            youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M44 23c-.4-1.6-1.7-2.9-3.3-3.3C37.8 19 30 19 30 19s-7.8 0-10.7.7c-1.6.4-2.9 1.7-3.3 3.3C15 25.9 15 30 15 30s0 4.1.7 7c.4 1.6 1.7 2.9 3.3 3.3 2.9.7 10.7.7 10.7.7s7.8 0 10.7-.7c1.6-.4 2.9-1.7 3.3-3.3.7-2.9.7-7 .7-7s0-4.1-.7-7z" fill="#FF0000"/><polygon points="25,24 37,30 25,36" fill="#FFFFFF"/></svg>`,
-            spotify: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="30" r="20" fill="none" stroke="#1DB954" stroke-width="2"/><path d="M18 24c8-2.2 16-1.2 23 2.2" stroke="#1DB954" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M20 31c6.5-1.5 13.5-.8 19 2.2" stroke="#1DB954" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M22 37c5-1 10.5 0 15 2.2" stroke="#1DB954" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`,
-            twitter: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M18 16h6l10 14 11-14h5L37 32l13 18h-6L33 35 21 50h-5l14-17L18 16z" fill="#fff"/></svg>`,
-            tiktok: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><g transform="translate(1,0)"><path d="M37 23a10 10 0 0 1-5-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V30a4 4 0 1 0 3.5 4V15h5a10 10 0 0 0 5 8z" fill="#25F4EE"/><path d="M39 25a10 10 0 0 1-7-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V32a4 4 0 1 0 3.5 4V17h5a10 10 0 0 0 5 8z" fill="#FE2C55"/><path d="M38 24a10 10 0 0 1-6-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V31a4 4 0 1 0 3.5 4V16h5a10 10 0 0 0 5 8z" fill="#fff"/></g></svg>`,
-            twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></svg>`,
-            netflix: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M20 14h6v32h-6zM34 14h6v32h-6z" fill="#E50914"/><path d="M20 14l20 32h-6L20 14z" fill="#B81D24"/></svg>`,
-            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><g transform="translate(10,10) scale(0.66)" opacity="0.95"><path fill="#FF453A" d="M30 15c0-8.28-6.72-15-15-15S0 6.72 0 15c0 3.8 1.41 7.27 3.75 9.92L30 15z"/><path fill="#FF9F0A" d="M45 30c8.28 0 15-6.72 15-15S53.28 0 45 0c-3.8 0-7.27 1.41-9.92 3.75L45 30z"/><path fill="#FFD60A" d="M30 45c0 8.28 6.72 15 15 15s15-6.72 15-15c0-3.8-1.41-7.27-3.75-9.92L30 45z"/><path fill="#30D158" d="M15 30c-8.28 0-15 6.72-15 15s6.72 15 15 15c3.8 0 7.27-1.41 9.92-3.75L15 30z"/><path fill="#0A84FF" d="M30 15c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L30 15z"/><path fill="#5E5CE6" d="M45 30c0 8.28-6.72 15-15 15s-15-6.72-15-15c0-3.8 1.41-7.27 3.75-9.92L45 30z"/></g></svg>`,
-            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="31" r="16" fill="#2c2c2e" stroke="#3a3a3c" stroke-width="2"/><circle cx="30" cy="31" r="10" fill="#0a84ff"/><circle cx="30" cy="31" r="5" fill="#000"/><circle cx="41" cy="20" r="2.5" fill="#ff453a"/></svg>`,
-            settings: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="30" r="14" fill="none" stroke="#8E8E93" stroke-width="5" stroke-dasharray="6 3"/><circle cx="30" cy="30" r="7" fill="#8E8E93"/></svg>`,
-            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#636366" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#636366" stroke-width="2"/><line x1="18" y1="40" x2="36" y2="40" stroke="#636366" stroke-width="2"/></svg>`,
-            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="23" cy="23" r="9" fill="#ffd60a"/><path d="M22 40a8 8 0 0 1 0-16 10 10 0 0 1 19 3 7 7 0 0 1-3 13z" fill="#64D2FF" opacity="0.85"/></svg>`,
-            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#000"/><circle cx="30" cy="30" r="22" fill="none" stroke="#3a3a3c" stroke-width="2"/><line x1="30" y1="30" x2="30" y2="15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="30" x2="41" y2="30" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="30" x2="19" y2="39" stroke="#ff453a" stroke-width="1.5"/><circle cx="30" cy="30" r="2" fill="#ff453a"/></svg>`,
-            telegram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="30" r="20" fill="#29B6F6"/><path d="M19 29.5l18.5-7.5c1.2-.4 2.2.3 1.8 1.8l-3.2 15c-.2 1-1 1.3-1.8.8l-5.3-3.9-2.5 2.4c-.3.3-.5.5-1 .5l.4-5.3 9.6-8.7c.4-.4-.1-.6-.6-.3l-11.9 7.5-5.1-1.6c-1.1-.3-1.1-1.1.2-1.7z" fill="#fff"/></svg>`,
-            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><rect x="10" y="18" width="40" height="25" rx="5" fill="#30d158"/><rect x="10" y="24" width="40" height="25" rx="5" fill="#0a84ff"/><rect x="10" y="30" width="40" height="25" rx="5" fill="#ff9f0a"/></svg>`,
-            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M30 14l4 8h-8zM20 42l10-20 4 8H14zM40 42H20l4-8h20z" fill="#0a84ff"/></svg>`,
-            pinterest: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M30 12c-9.9 0-18 8.1-18 18 0 7.6 4.7 14.1 11.4 16.7-.2-1.4-.3-3.6.1-5.1l2.5-10.7s-.6-1.3-.6-3.2c0-3 1.7-5.3 3.9-5.3 1.8 0 2.7 1.4 2.7 3 0 1.8-1.2 4.6-1.8 7.1-.5 2.1 1.1 3.8 3.2 3.8 3.8 0 6.8-4 6.8-9.8 0-5.1-3.7-8.7-8.9-8.7-6.1 0-9.6 4.6-9.6 9.3 0 1.8.7 3.8 1.6 4.9.2.2.2.4.1.7l-.6 2.4c-.1.4-.3.5-.7.3-2.6-1.2-4.2-5-4.2-8.1 0-6.6 4.8-12.7 13.8-12.7 7.3 0 12.9 5.2 12.9 12.1 0 7.2-4.5 13-10.8 13-2.1 0-4.1-1.1-4.8-2.4l-1.3 5c-.5 1.8-1.8 4.1-2.7 5.5 1.7.5 3.5.8 5.4.8 9.9 0 18-8.1 18-18S39.9 12 30 12z" fill="#E60023"/></svg>`,
-            whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M30 14c-8.8 0-16 7.2-16 16 0 2.8.7 5.5 2.1 7.9L14 46l8.3-2.2c2.3 1.3 5 2 7.7 2 8.8 0 16-7.2 16-16s-7.2-16-16-16zm9.3 22.6c-.4 1.1-2.3 2.1-3.2 2.2-.9.1-2.1.2-3.4-.2-2.1-.7-4.8-2.1-7.2-4.5-3-3-4.5-5.9-5-7.3-.5-1.4 0-2.8.5-3.3.4-.5.9-.6 1.2-.6h.9c.3 0 .7 0 1 .7l1.4 3.4c.1.3.1.6 0 .9l-.5.9c-.2.2-.3.4-.1.8.5.9 1.5 2.2 2.9 3.4 1.8 1.6 3.3 2.1 4.2 2.5.4.2.6.1.8-.1l1.1-1.3c.3-.4.7-.5 1-.3l3.2 1.5c.4.2.6.4.6.8 0 .4-.2 1.5-.7 2z" fill="#25D366"/></svg>`,
-            google: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M41.6 30.2c0-1-.1-1.8-.3-2.6H30v5h6.6c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.5-5.2 3.5-9.2z" fill="#4285F4"/><path d="M30 42c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.2 0-5.8-2.1-6.8-5h-4v3.1C21.2 39.1 25.3 42 30 42z" fill="#34A853"/><path d="M23.2 32.1c-.2-.7-.4-1.4-.4-2.1s.2-1.4.4-2.1v-3.1h-4C18.4 26.4 18 28.2 18 30s.4 3.6 1.2 5.2l4-3.1z" fill="#FBBC05"/><path d="M30 21.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C35.9 18.4 33.2 17.5 30 17.5c-4.7 0-8.8 2.9-10.8 6.8l4 3.1c1-2.9 3.6-5.6 6.8-5.6z" fill="#EA4335"/></svg>`,
-            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><g transform="translate(11, 14)"><path d="M31.2 3.2s-2.8-1.3-5.8-1.6c-.3.5-.6 1.1-.8 1.6-3.2-.5-6.4-.5-9.6 0-.2-.5-.5-1.1-.8-1.6-3 .3-5.8 1.6-5.8 1.6S3 10.3 3 18.6c2.1 1.5 4.1 2.5 6.2 3.2.5-.7.9-1.4 1.3-2.1-1.1-.4-2.2-.9-3.1-1.6.3-.2.5-.4.7-.6 5.9 2.7 12.3 2.7 18.1 0 .2.2.5.4.7.6-.9.7-2 1.2-3.1 1.6.4.7.8 1.4 1.3 2.1 2.1-.7 4.1-1.7 6.2-3.2 0-8.3-4.6-15.4-4.6-15.4zM12.7 15.3c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-.9 2.5-2.2 2.5zm12.6 0c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-1 2.5-2.2 2.5z" fill="#5865F2"/></g></svg>`,
+            instagram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD600"/><stop offset="50%" stop-color="#FF0069"/><stop offset="100%" stop-color="#7638FA"/></linearGradient></defs><rect x="14" y="14" width="32" height="32" rx="10" fill="none" stroke="url(#ig)" stroke-width="4"/><circle cx="30" cy="30" r="7.5" fill="none" stroke="url(#ig)" stroke-width="4"/><circle cx="38.5" cy="21.5" r="2.5" fill="#FF0069"/></svg>`,
+            
+            youtube: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="ytGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF1A40"/><stop offset="100%" stop-color="#D90022"/></linearGradient></defs><rect x="13" y="18" width="34" height="24" rx="9" fill="url(#ytGrad)"/><polygon points="26,24 37,30 26,36" fill="${BG}"/></svg>`,
+            
+            gmail: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><defs><linearGradient id="gmLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF5268"/><stop offset="100%" stop-color="#E51C37"/></linearGradient><linearGradient id="gmMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6370"/><stop offset="100%" stop-color="#FF2E4C"/></linearGradient><linearGradient id="gmRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFC107"/><stop offset="50%" stop-color="#00E676"/><stop offset="100%" stop-color="#2979FF"/></linearGradient></defs><path d="M16 19 C16 16.5 18 15 20 16.5 L30 24 L20 31 L16 28 Z" fill="url(#gmMid)"/><path d="M16 24 L16 41 C16 43 17.5 44 19.5 44 L20 44 L20 27 Z" fill="url(#gmLeft)"/><path d="M30 24 L40 16.5 C42 15 44 16.5 44 19 L44 41 C44 43 42.5 44 40.5 44 L39.5 44 L39.5 27 Z" fill="url(#gmRight)"/></svg>`,
 
-            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="30" r="18" fill="#ff9f0a"/><text x="30" y="42" font-size="34" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
+            spotify: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="#1DB954"/><path d="M20 23.5c7-1.5 14.5-.8 20.5 2.5" stroke="#121212" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M21.5 30c5.8-1.2 12-.4 17 2.2" stroke="#121212" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M23 36c4.5-.9 9.5-.2 13.5 1.8" stroke="#121212" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`,
+            
+            twitter: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M18 16h6l10 14 11-14h5L37 32l13 18h-6L33 35 21 50h-5l14-17L18 16z" fill="#fff"/></svg>`,
+            
+            tiktok: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(1,0)"><path d="M37 23a10 10 0 0 1-5-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V30a4 4 0 1 0 3.5 4V15h5a10 10 0 0 0 5 8z" fill="#25F4EE"/><path d="M39 25a10 10 0 0 1-7-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V32a4 4 0 1 0 3.5 4V17h5a10 10 0 0 0 5 8z" fill="#FE2C55"/><path d="M38 24a10 10 0 0 1-6-2v13a9 9 0 1 1-9-9c.5 0 1 0 1.5.1V31a4 4 0 1 0 3.5 4V16h5a10 10 0 0 0 5 8z" fill="#fff"/></g></svg>`,
+            
+            twitch: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M16 14l-4 6v26h9v5h6l5-5h6l10-10V14H16zm26 21l-5 5h-7l-5 5v-5h-5V18h22v17z" fill="#9146FF"/><rect x="33" y="22" width="3" height="8" fill="#fff"/><rect x="25" y="22" width="3" height="8" fill="#fff"/></svg>`,
+            
+            netflix: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M20 14h6v32h-6zM34 14h6v32h-6z" fill="#E50914"/><path d="M20 14l20 32h-6L20 14z" fill="#B81D24"/></svg>`,
+            
+            photos: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g opacity="0.9" transform="translate(30, 30)"><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FF3B30"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FF9500" transform="rotate(45)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#FFCC00" transform="rotate(90)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#34C759" transform="rotate(135)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#00C7BE" transform="rotate(180)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#30B0C7" transform="rotate(225)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#007AFF" transform="rotate(270)"/><path d="M0 -15 C4 -15 7 -12 7 -8 C7 -2 0 0 0 0 C0 0 -7 -2 -7 -8 C-7 -12 -4 -15 0 -15Z" fill="#AF52DE" transform="rotate(315)"/></g></svg>`,
+            
+            camera: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="#3a3a3c"/><circle cx="30" cy="30" r="17" fill="#1c1c1e"/><circle cx="30" cy="30" r="14" fill="#2c2c2e"/><circle cx="30" cy="30" r="11" fill="#0f172a"/><path d="M22 22 A10 10 0 0 1 36 20 A8 8 0 0 0 24 28" fill="#ffffff" opacity="0.25"/></svg>`,
+            
+            settings: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30,30) scale(0.95)"><path d="M0 -22 L3 -22 L5 -18 L9 -20 L11 -17 L14 -20 L17 -17 L14 -14 L17 -11 L20 -14 L22 -11 L18 -9 L22 -5 L22 0 L18 3 L20 8 L17 11 L20 14 L17 17 L14 14 L11 17 L14 20 L11 22 L8 18 L5 22 L0 22 L-3 22 L-5 18 L-9 20 L-11 17 L-14 20 L-17 17 L-14 14 L-17 11 L-20 14 L-22 11 L-18 9 L-22 5 L-22 0 L-18 -3 L-20 -8 L-17 -11 L-20 -14 L-17 -17 L-14 -14 L-11 -17 L-14 -20 L-11 -22 L-8 -18 L-5 -22 Z" fill="#8E8E93"/><circle cx="0" cy="0" r="12" fill="${BG}"/><circle cx="0" cy="0" r="6" fill="#8E8E93"/></g></svg>`,
+            
+            notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><rect x="12" y="12" width="36" height="36" rx="6" fill="#2c2c2e"/><rect x="12" y="12" width="36" height="8" rx="2" fill="#ffd60a"/><line x1="18" y1="26" x2="42" y2="26" stroke="#555" stroke-width="2"/><line x1="18" y1="33" x2="42" y2="33" stroke="#555" stroke-width="2"/><line x1="18" y1="40" x2="32" y2="40" stroke="#555" stroke-width="2"/></svg>`,
+            
+            weather: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="24" cy="24" r="8" fill="#FFD60A"/><path d="M20 38a7 7 0 0 1 0-14 9 9 0 0 1 17 2 6 6 0 0 1-2 12z" fill="#64D2FF" opacity="0.85"/></svg>`,
+            
+            clock: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#1c1c1e"/><rect x="8" y="8" width="44" height="44" rx="12" fill="none" stroke="#2c2c2e" stroke-width="1"/><g fill="#8e8e93" font-size="7" font-weight="600" text-anchor="middle"><text x="30" y="18">12</text><text x="44" y="32.5">3</text><text x="30" y="47">6</text><text x="16" y="32.5">9</text></g><line x1="30" y1="30" x2="22" y2="26" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="42" y2="31" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="33" y2="42" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round"/><circle cx="30" cy="30" r="1.5" fill="#ff9f0a"/></svg>`,
+            
+            telegram: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="19" fill="#29B6F6"/><path d="M19 29.5l18.5-7.5c1.2-.4 2.2.3 1.8 1.8l-3.2 15c-.2 1-1 1.3-1.8.8l-5.3-3.9-2.5 2.4c-.3.3-.5.5-1 .5l.4-5.3 9.6-8.7c.4-.4-.1-.6-.6-.3l-11.9 7.5-5.1-1.6c-1.1-.3-1.1-1.1.2-1.7z" fill="#fff"/></svg>`,
+            
+            wallet: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(10, 14)"><rect x="4" y="2" width="32" height="12" rx="3" fill="#30D158"/><rect x="4" y="7" width="32" height="12" rx="3" fill="#FFD60A"/><rect x="4" y="12" width="32" height="12" rx="3" fill="#0A84FF"/><path d="M0 16 C0 14, 2 13, 5 13 L35 13 C38 13, 40 14, 40 16 L40 30 C40 33, 37 34, 34 34 L6 34 C3 34, 0 33, 0 30 Z" fill="#E5E5EA" opacity="0.95"/><path d="M14 13 C17 13, 18 19, 20 19 C22 19, 23 13, 26 13 Z" fill="#1C1C1E"/></g></svg>`,
+            
+            appstore: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(30, 30)"><path d="M-12 10 L0 -10 L12 10" stroke="#0A84FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="-14" y1="4" x2="14" y2="4" stroke="#0A84FF" stroke-width="4" stroke-linecap="round"/></g></svg>`,
+            
+            whatsapp: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 14c-8.8 0-16 7.2-16 16 0 2.8.7 5.5 2.1 7.9L14 46l8.3-2.2c2.3 1.3 5 2 7.7 2 8.8 0 16-7.2 16-16s-7.2-16-16-16zm9.3 22.6c-.4 1.1-2.3 2.1-3.2 2.2-.9.1-2.1.2-3.4-.2-2.1-.7-4.8-2.1-7.2-4.5-3-3-4.5-5.9-5-7.3-.5-1.4 0-2.8.5-3.3.4-.5.9-.6 1.2-.6h.9c.3 0 .7 0 1 .7l1.4 3.4c.1.3.1.6 0 .9l-.5.9c-.2.2-.3.4-.1.8.5.9 1.5 2.2 2.9 3.4 1.8 1.6 3.3 2.1 4.2 2.5.4.2.6.1.8-.1l1.1-1.3c.3-.4.7-.5 1-.3l3.2 1.5c.4.2.6.4.6.8 0 .4-.2 1.5-.7 2z" fill="#25D366"/></svg>`,
+            
+            google: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M41.6 30.2c0-1-.1-1.8-.3-2.6H30v5h6.6c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.5-5.2 3.5-9.2z" fill="#4285F4"/><path d="M30 42c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.2 0-5.8-2.1-6.8-5h-4v3.1C21.2 39.1 25.3 42 30 42z" fill="#34A853"/><path d="M23.2 32.1c-.2-.7-.4-1.4-.4-2.1s.2-1.4.4-2.1v-3.1h-4C18.4 26.4 18 28.2 18 30s.4 3.6 1.2 5.2l4-3.1z" fill="#FBBC05"/><path d="M30 21.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C35.9 18.4 33.2 17.5 30 17.5c-4.7 0-8.8 2.9-10.8 6.8l4 3.1c1-2.9 3.6-5.6 6.8-5.6z" fill="#EA4335"/></svg>`,
+            
+            discord: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(11, 14)"><path d="M31.2 3.2s-2.8-1.3-5.8-1.6c-.3.5-.6 1.1-.8 1.6-3.2-.5-6.4-.5-9.6 0-.2-.5-.5-1.1-.8-1.6-3 .3-5.8 1.6-5.8 1.6S3 10.3 3 18.6c2.1 1.5 4.1 2.5 6.2 3.2.5-.7.9-1.4 1.3-2.1-1.1-.4-2.2-.9-3.1-1.6.3-.2.5-.4.7-.6 5.9 2.7 12.3 2.7 18.1 0 .2.2.5.4.7.6-.9.7-2 1.2-3.1 1.6.4.7.8 1.4 1.3 2.1 2.1-.7 4.1-1.7 6.2-3.2 0-8.3-4.6-15.4-4.6-15.4zM12.7 15.3c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-.9 2.5-2.2 2.5zm12.6 0c-1.2 0-2.2-1.1-2.2-2.5 0-1.4.9-2.5 2.2-2.5 1.2 0 2.2 1.1 2.2 2.5 0 1.4-1 2.5-2.2 2.5z" fill="#5865F2"/></g></svg>`,
 
-            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><g transform="translate(15, 15)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158" transform="scale(1.1)"/></g></svg>`,
-            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><circle cx="30" cy="30" r="21" fill="none" stroke="#0a84ff" stroke-width="2.5"/><polygon points="30,12 36,28 30,30" fill="#ff453a"/><polygon points="30,48 24,32 30,30" fill="#fff"/></svg>`,
-            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M30 14c-8.3 0-15 5.8-15 13 0 4.2 2.3 8 5.9 10.4l-1.5 5.6 5.9-3.1c1.5.4 3.1.7 4.7.7 8.3 0 15-5.8 15-13s-6.7-13-15-13z" fill="#30d158"/></svg>`,
-            music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${DARK_BG}"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#ff375f"/></svg>`
+            calculator: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="18" fill="#ff9f0a"/><text x="30" y="41" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold">÷</text></svg>`,
+
+            phone: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><g transform="translate(15, 15)"><path d="M22 17.5c-1.5 0-3-.3-4.4-.8-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.5-1.8-6.4-4.7-8.2-8.2l2.7-2.7c.3-.3.4-.8.3-1.2C8 6.2 7.7 4.7 7.7 3.2c0-.7-.5-1.2-1.2-1.2H2c-.7 0-1.2.5-1.2 1.2C.8 15.1 10.9 25.2 22.8 25.2c.7 0 1.2-.5 1.2-1.2v-4.5c0-.7-.5-1.2-1.2-1.2z" fill="#30d158" transform="scale(1.1)"/></g></svg>`,
+            
+            safari: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><circle cx="30" cy="30" r="20" fill="none" stroke="#0a84ff" stroke-width="2.5"/><polygon points="30,12 36,28 30,30" fill="#ff453a"/><polygon points="30,48 24,32 30,30" fill="#fff"/></svg>`,
+            
+            messages: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M30 14c-8.3 0-15 5.8-15 13 0 4.2 2.3 8 5.9 10.4l-1.5 5.6 5.9-3.1c1.5.4 3.1.7 4.7.7 8.3 0 15-5.8 15-13s-6.7-13-15-13z" fill="#30d158"/></svg>`,
+            
+            music: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="${BG}"/><path d="M36 16v18.2c-1-.7-2.4-1.2-4-1.2-3.3 0-6 2.2-6 5s2.7 5 6 5 6-2.2 6-5V22l8-2v-4l-10 2z" fill="#ff375f"/></svg>`
         };
 
         const initialApps = [
@@ -183,7 +200,7 @@
             { id: 'clock', name: 'Reloj', svg: SVGS.clock },
             { id: 'telegram', name: 'Telegram', svg: SVGS.telegram },
             { id: 'notes', name: 'Notas', svg: SVGS.notes },
-            { id: 'pinterest', name: 'Pinterest', svg: SVGS.pinterest },
+            { id: 'gmail', name: 'Gmail', svg: SVGS.gmail },
             { id: 'discord', name: 'Discord', svg: SVGS.discord },
             { id: 'wallet', name: 'Cartera', svg: SVGS.wallet },
             { id: 'appstore', name: 'App Store', svg: SVGS.appstore },
